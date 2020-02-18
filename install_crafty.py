@@ -121,7 +121,7 @@ def do_virt_dir_install():
         sys.exit(1)
 
     try:
-        pip_output = subprocess.check_output('pip3 install -r {}'.format(requirements_file), shell=True)
+        pip_output = subprocess.check_output('pip3 install --no-cache-dir -r {}'.format(requirements_file), shell=True)
         logger.info("Pip output: \n{}".format(pip_output))
 
     except Exception as e:
