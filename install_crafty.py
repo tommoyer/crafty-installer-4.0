@@ -17,7 +17,7 @@ from app.pretty import pretty
 with open('config.json', 'r') as fh:
     defaults = json.load(fh)
 
-if len(sys.argv) >= 1:
+if len(sys.argv) > 1:
     if sys.argv[1] == "-d":
         defaults['debug'] = True
         pretty.info("Debug mode turned on")
