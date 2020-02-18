@@ -18,6 +18,7 @@ with open('config.json', 'r') as fh:
     defaults = json.load(fh)
 
 
+#our pretty header
 def do_header():
     msg = "-" * 25
     msg += "# \t \t Crafty Controller Linux Installer \t \t #"
@@ -52,6 +53,7 @@ def do_distro_install(distro):
         logger.critical("Error installing dependencies: {}".format(e))
 
 
+# this switches to the branch chosen and does the pip install and such
 def do_virt_dir_install():
     # choose your destiny
     pretty.info("Choose your destiny:")
@@ -120,14 +122,15 @@ def do_virt_dir_install():
         pretty.critical("unable to find requirements.txt file in: {}".format(os.path.abspath(os.curdir)))
         sys.exit(1)
 
+    # create a quick script / execute pip install
     try:
-        pip_output = subprocess.check_output('pip3 install --no-cache-dir -r {}'.format(requirements_file), shell=True)
-        logger.info("Pip output: \n{}".format(pip_output))
+        do_pip_install()
 
     except Exception as e:
         logger.critical("Unable to checkout branch: dev")
 
 
+# creates the venv and clones the git repo
 def setup_repo():
     # create new virtual environment
     pretty.info("Creating New Virtual Environment")
@@ -152,6 +155,25 @@ def setup_repo():
     subprocess.check_output('git clone http://gitlab.com/Ptarrant1/crafty-web.git', shell=True)
 
 
+# installs pip requirements via shell script
+def do_pip_install():
+    filename = os.path.join(temp_dir, 'pip_install.sh')
+
+    txt = "#!/bin/bash\n"
+    txt += "cd {}\n".format(install_dir)
+    txt += "source venv/bin/activate \n"
+    txt += "cd crafty-web \n"
+    txt += "pip3 install --no-cache-dir -r requirements.txt \n"
+    with open(filename, 'w') as fh:
+        fh.write(txt)
+        fh.close()
+
+    subprocess.check_output("chmod +x {}".format(filename), shell=True)
+    pip_output = subprocess.check_output(filename, shell=True)
+    logger.info("Pip output: \n{}".format(pip_output))
+
+
+# Creates the run_crafty.sh
 def make_startup_script():
     os.chdir(install_dir)
     logger.info("Changing to {}".format(os.path.abspath(os.curdir)))
@@ -168,6 +190,7 @@ def make_startup_script():
     subprocess.check_output("chmod +x *.sh", shell=True)
 
 
+# Creates the update_crafty.sh
 def make_update_script():
     os.chdir(install_dir)
     logger.info("Changing to {}".format(os.path.abspath(os.curdir)))
