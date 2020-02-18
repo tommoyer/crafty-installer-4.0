@@ -220,6 +220,22 @@ def make_update_script():
     subprocess.check_output("chmod +x *.sh", shell=True)
 
 
+# get distro
+def get_distro():
+    uname = platform.uname()
+
+    distro = "Unknown"
+
+    pretty.info("Platform is: {}".format(uname))
+    logger.info("Platform is: {}".format(uname))
+
+    if "ubuntu" in str(platform.uname()).lower():
+        pretty.info("Ubuntu detected")
+        logger.info("Ubuntu detected")
+        distro = "Ubuntu"
+
+    return distro
+
 if __name__ == "__main__":
 
     logging.basicConfig(filename='installer.log',
@@ -245,10 +261,7 @@ if __name__ == "__main__":
     pretty.info("Linux Check Success")
     pretty.info("Python Version Check - {}.{}".format(sys.version_info.major, sys.version_info.minor))
 
-    # check distro
-    if "ubuntu" in str(platform.uname()).lower():
-        pretty.info("Ubuntu detected")
-        distro = "Ubuntu"
+    distro = get_distro()
 
 
     # default py_check
