@@ -9,7 +9,6 @@ import platform
 import logging
 import subprocess
 import getpass
-from pathlib import Path
 
 from app.helper import helper
 from app.pretty import pretty
