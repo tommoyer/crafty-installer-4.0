@@ -69,10 +69,14 @@ def do_virt_dir_install():
     pretty.info("Snaps - Unstable, but full of exciting things!")
     pretty.info("Dev - Highly Unstable, full of bugs and new features")
 
-    branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['master',
+    # unattended
+    if not defaults['unattended']:
+        branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['master',
                                                                                            'beta',
                                                                                            'snaps',
                                                                                            'dev'])
+    else:
+        branch = defaults['branch']
 
     # changing to git repo dir
     os.chdir(os.path.join(install_dir, "crafty-web"))
@@ -230,7 +234,6 @@ if __name__ == "__main__":
     starting_dir = os.path.abspath(os.path.curdir)
     temp_dir = os.path.join(starting_dir, 'temp')
 
-
     do_header()
 
     # are we on linux?
@@ -261,7 +264,11 @@ if __name__ == "__main__":
         if not py_check:
             pretty.warning("Your python version didn't check out - do you want us to fix this for you?")
 
-        install_requirements = helper.get_user_valid_input("Install {} requirements?".format(distro), ['y', 'n'])
+        # unattended
+        if not defaults['unattended']:
+            install_requirements = helper.get_user_valid_input("Install {} requirements?".format(distro), ['y', 'n'])
+        else:
+            install_requirements = 'y'
 
         if install_requirements == "y":
             pretty.info("Installing required packages for {} - Please enter sudo password when prompted".format(distro))
@@ -276,9 +283,13 @@ if __name__ == "__main__":
     # do we want to install to default dir?
     pretty.info("Craftys Default install directory is set to: {}".format(defaults['install_dir']))
 
-    install_dir = helper.get_user_valid_input(
-        "Install Crafty to this directory? {}".format(defaults['install_dir']),
-        ["y", "n"])
+    # unattended
+    if not defaults['unattended']:
+        install_dir = helper.get_user_valid_input(
+            "Install Crafty to this directory? {}".format(defaults['install_dir']),
+            ["y", "n"])
+    else:
+        install_dir = 'y'
 
     do_header()
 
@@ -295,7 +306,11 @@ if __name__ == "__main__":
         pretty.warning("Unable to write to {} - Permission denied".format(install_dir))
         logger.warning("Unable to write to {} - Permission denied".format(install_dir))
 
-        own_install_dir = helper.get_user_valid_input("Do you want us to fix this permission issue?", ['y', 'n'])
+        # unattended
+        if not defaults['unattended']:
+            own_install_dir = helper.get_user_valid_input("Do you want us to fix this permission issue?", ['y', 'n'])
+        else:
+            own_install_dir = "y"
 
         if own_install_dir == "y":
             try:
@@ -345,7 +360,12 @@ if __name__ == "__main__":
     if len(files) > 0:
         logger.warning("Old Crafty install detected: {}".format(install_dir))
         pretty.info("Old Crafty Install Detected, do you wish to delete this old install?")
-        del_old = helper.get_user_valid_input("Delete files in {}? ".format(install_dir), ['y', 'n'])
+
+        # unattended
+        if not defaults['unattended']:
+            del_old = helper.get_user_valid_input("Delete files in {}? ".format(install_dir), ['y', 'n'])
+        else:
+            del_old = "y"
 
         if del_old == "y":
             logger.info("User said to delete old files")
@@ -358,8 +378,13 @@ if __name__ == "__main__":
                 pretty.warning("Unable to write to {} - Permission denied".format(install_dir))
                 logger.warning("Unable to write to {} - Permission denied".format(install_dir))
 
-                force_old_removal = helper.get_user_valid_input("Do you want us to fix this permission issue?",
+                # unattended
+                if not defaults['unattended']:
+                    force_old_removal = helper.get_user_valid_input("Do you want us to fix this permission issue?",
                                                               ['y', 'n'])
+                else:
+                    force_old_removal = "y"
+
                 if force_old_removal == "y":
 
                     helper.ensure_dir_exists(temp_dir)
@@ -390,8 +415,6 @@ if __name__ == "__main__":
             logger.info("User is keeping old files")
             pretty.warning("Installing on top of an old install isn't supported - God Speed")
 
-
-
     setup_repo()
 
     do_virt_dir_install()
@@ -415,6 +438,7 @@ if __name__ == "__main__":
     pretty.info("Your install is located here: {}".format(install_dir))
     pretty.info("You can run crafty by running {}".format(os.path.join(install_dir, "run_crafty.sh")))
     pretty.info("You can update crafty by running {}".format(os.path.join(install_dir, "update_crafty.sh")))
+
 
 
 
