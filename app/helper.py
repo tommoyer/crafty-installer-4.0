@@ -1,5 +1,9 @@
 import os
+import time
 import subprocess
+import logging
+
+logger = logging.getLogger(__name__)
 
 class bcolors:
     HEADER = '\033[95m'
@@ -14,7 +18,9 @@ class bcolors:
 
 class helper_obj:
 
-
+    def clear_screen(self):
+        time.sleep(.5)
+        os.system('clear')
 
     def run_command(self, command_list):
         process = subprocess.Popen(['ls', '-a'], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
