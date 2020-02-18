@@ -2,12 +2,13 @@
 
 import os
 import sys
+import json
 import time
 import shutil
 import platform
 import logging
 import subprocess
-import json
+import getpass
 
 from app.helper import helper
 from app.pretty import pretty
@@ -31,7 +32,11 @@ def do_header():
 def do_distro_install(distro):
     real_dir = os.path.abspath(os.curdir)
 
+    pretty.warning("This install could take a long time depending on how out dated your system is.")
+    pretty.warning("Please be patient and do not exit the install or things may break")
+
     if distro == "Ubuntu":
+        pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'ubuntu_install_depends.sh')
     else:
         pretty.warning("Unknown Distro: {}".format(distro))
@@ -44,7 +49,6 @@ def do_distro_install(distro):
 
         pretty.critical("Error installing dependencies: {}".format(e))
         logger.critical("Error installing dependencies: {}".format(e))
-
 
 
 def do_virt_dir_install():
@@ -255,9 +259,22 @@ if __name__ == "__main__":
 
     # can we write to the dir?
     if not helper.check_writeable(install_dir):
-        pretty.critical("Unable to write to {} - Permission denied".format(install_dir))
-        logger.critical("Unable to write to {} - Permission denied".format(install_dir))
-        sys.exit(1)
+        pretty.warning("Unable to write to {} - Permission denied".format(install_dir))
+        logger.warning("Unable to write to {} - Permission denied".format(install_dir))
+
+        own_install_dir = helper.get_user_valid_input("Do you want us to fix this permission issue?", ['y', 'n'])
+        if own_install_dir == "y":
+            try:
+                username = getpass.getuser()
+                subprocess.check_output("sudo chown {}:{} -R {}".format(username, username, install_dir))
+                subprocess.check_output("sudo chmod 775 -R {}".format(install_dir))
+            except Exception as e:
+                logger.critical("Unable to fix permissions issue")
+
+            #after changing the ownership, let's see if we can write to it now.
+            if not helper.check_writeable(install_dir):
+                logger.critical("{} is still unwritable - Unable to fix permissions issue".format(install_dir))
+                sys.exit(1)
 
     # is this a fresh install?
     files = os.listdir(install_dir)
