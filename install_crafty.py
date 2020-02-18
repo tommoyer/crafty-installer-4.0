@@ -254,30 +254,29 @@ if __name__ == "__main__":
     # default py_check
     py_check = False
 
-    # are we at least on 3.7?
-    if not (sys.version_info.major == 3 and sys.version_info.minor >= 7):
-        pretty.critical("This script requires Python 3.7 or higher!")
+    # are we at least on 3.6?
+    if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
+        pretty.critical("This script requires Python 3.6 or higher!")
         pretty.critical("You are using Python {}.{}.".format(sys.version_info.major, sys.version_info.minor))
-        logger.critical("Python Version < 3.7: {}.{} was found".format(sys.version_info.major, sys.version_info.minor))
+        logger.critical("Python Version < 3.6: {}.{} was found".format(sys.version_info.major, sys.version_info.minor))
         time.sleep(1)
         pretty.warning("Your python version didn't check out - do you want us to fix this for you?")
-
     else:
         py_check = True
 
-        # unattended
-        if not defaults['unattended']:
-            install_requirements = helper.get_user_valid_input("Install {} requirements?".format(distro), ['y', 'n'])
-        else:
-            install_requirements = 'y'
+    # unattended
+    if not defaults['unattended']:
+        install_requirements = helper.get_user_valid_input("Install {} requirements?".format(distro), ['y', 'n'])
+    else:
+        install_requirements = 'y'
 
-        if install_requirements == "y":
-            pretty.info("Installing required packages for {} - Please enter sudo password when prompted".format(distro))
-            do_distro_install(distro)
-        else:
-            if not py_check:
-                pretty.critical("This script requires Python 3.7 or higher!")
-                sys.exit(1)
+    if install_requirements == "y":
+        pretty.info("Installing required packages for {} - Please enter sudo password when prompted".format(distro))
+        do_distro_install(distro)
+    else:
+        if not py_check:
+            pretty.critical("This script requires Python 3.7 or higher!")
+            sys.exit(1)
 
     do_header()
 
