@@ -20,6 +20,10 @@ with open('config.json', 'r') as fh:
 
 #our pretty header
 def do_header():
+
+    if not defaults['debug_mode']:
+        helper.clear_screen()
+
     msg = "-" * 25
     msg += "# \t \t Crafty Controller Linux Installer \t \t #"
     msg += "-" * 25
@@ -55,6 +59,8 @@ def do_distro_install(distro):
 
 # this switches to the branch chosen and does the pip install and such
 def do_virt_dir_install():
+    do_header()
+
     # choose your destiny
     pretty.info("Choose your destiny:")
     pretty.info("Crafty comes in different branches:")
@@ -132,6 +138,8 @@ def do_virt_dir_install():
 
 # creates the venv and clones the git repo
 def setup_repo():
+    do_header()
+
     # create new virtual environment
     pretty.info("Creating New Virtual Environment")
 
@@ -222,7 +230,7 @@ if __name__ == "__main__":
     starting_dir = os.path.abspath(os.path.curdir)
     temp_dir = os.path.join(starting_dir, 'temp')
 
-    helper.clear_screen()
+
     do_header()
 
     # are we on linux?
@@ -263,7 +271,6 @@ if __name__ == "__main__":
                 pretty.critical("This script requires Python 3.7 or higher!")
                 sys.exit(1)
 
-    helper.clear_screen()
     do_header()
 
     # do we want to install to default dir?
@@ -273,7 +280,6 @@ if __name__ == "__main__":
         "Install Crafty to this directory? {}".format(defaults['install_dir']),
         ["y", "n"])
 
-    helper.clear_screen()
     do_header()
 
     if install_dir == 'n':
@@ -332,7 +338,6 @@ if __name__ == "__main__":
 
     time.sleep(1)
 
-    helper.clear_screen()
     do_header()
 
     logger.info("Looking for old crafty install in: {}".format(install_dir))
@@ -385,17 +390,12 @@ if __name__ == "__main__":
             logger.info("User is keeping old files")
             pretty.warning("Installing on top of an old install isn't supported - God Speed")
 
-    helper.clear_screen()
-    do_header()
+
 
     setup_repo()
 
-    helper.clear_screen()
-    do_header()
-
     do_virt_dir_install()
 
-    helper.clear_screen()
     do_header()
 
     logger.info("Creating Shell Scripts")
@@ -404,7 +404,7 @@ if __name__ == "__main__":
     make_startup_script()
     make_update_script()
 
-    helper.clear_screen()
+    time.sleep(1)
     do_header()
 
     pretty.info("Cleaning up temp dir")

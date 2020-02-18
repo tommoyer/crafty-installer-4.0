@@ -1,5 +1,6 @@
 {
   "install_dir": "/var/opt/minecraft/crafty",
   "unattended_install": false,
-  "install_all_software": true
+  "install_all_software": true,
+  "debug_mode": true
 }
