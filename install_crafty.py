@@ -9,6 +9,7 @@ import platform
 import logging
 import subprocess
 import getpass
+from pathlib import Path
 
 from app.helper import helper
 from app.pretty import pretty
@@ -195,6 +196,8 @@ if __name__ == "__main__":
 
     logger.info("Installer Started")
 
+    starting_dir = os.path.curdir
+
     helper.clear_screen()
     do_header()
 
@@ -268,14 +271,26 @@ if __name__ == "__main__":
                 username = getpass.getuser()
                 logger.info("Username is {}".format(username))
 
-                subprocess.check_output("sudo chown {}:{} -R {}".format(username, username, install_dir))
-                logger.info("Executing sudo chown {}:{} -R {}".format(username, username, install_dir))
+                # let's create a quick sh script to create the dir as root, and then chown the dir to the current user
+                fix_perms_sh = os.path.join(starting_dir, "app", 'fix_perms.sh')
+                with open(fix_perms_sh, 'w') as fh:
+                    txt = "#!/bin/bash\n"
+                    txt += "sudo mkdir -p {}\n".format(install_dir)
+                    txt += "sudo chown {}:{} {}\n".format(username, username, install_dir)
+                    fh.write(txt)
+                    fh.close()
+                    subprocess.check_output("chmod +x {}".format(fix_perms_sh), shell=True)
+                    subprocess.check_output(fix_perms_sh, shell=True)
 
-                subprocess.check_output("sudo chmod 775 -R {}".format(install_dir))
-                logger.info("Executing sudo chmod 775 -R {}".format(install_dir))
+                    if not helper.check_writeable(install_dir):
+                        logger.critical("Unable to fix permissions issue after shell script")
+                        pretty.critical("Unable to fix permissions issue")
+                        sys.exit(1)
+
 
             except Exception as e:
                 logger.critical("Unable to fix permissions issue")
+                pretty.critical("Unable to fix permissions issue")
 
             # after changing the ownership, let's see if we can write to it now.
             if not helper.check_writeable(install_dir):
@@ -300,7 +315,35 @@ if __name__ == "__main__":
         if del_old == "y":
             logger.info("User said to delete old files")
             pretty.info("Deleting old copies of Crafty")
-            shutil.rmtree(install_dir)
+            try:
+                shutil.rmtree(install_dir)
+            except Exception as e:
+                pretty.warning("Unable to write to {} - Permission denied".format(install_dir))
+                logger.warning("Unable to write to {} - Permission denied".format(install_dir))
+
+                force_old_removal = helper.get_user_valid_input("Do you want us to fix this permission issue?",
+                                                              ['y', 'n'])
+                if force_old_removal == "y":
+                    remove_old_dir = os.path.join(starting_dir, "app", 'force_old_removal.sh')
+
+                    with open(remove_old_dir, 'w') as fh:
+                        txt = "#!/bin/bash\n"
+                        txt += "sudo rm -rf {}\n".format(install_dir)
+                        fh.write(txt)
+                        fh.close()
+                        subprocess.check_output("chmod +x {}".format(remove_old_dir), shell=True)
+                        subprocess.check_output(remove_old_dir, shell=True)
+
+                    try:
+                        files = os.listdir(install_dir)
+                    except:
+                        pass
+
+                    if len(files) > 0:
+                        logger.critical("Unable to delete the old install directory")
+                        pretty.critical("Unable to delete the old install directory")
+                        sys.exit(1)
+
             helper.ensure_dir_exists(install_dir)
 
         else:
