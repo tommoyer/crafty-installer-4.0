@@ -266,12 +266,18 @@ if __name__ == "__main__":
         if own_install_dir == "y":
             try:
                 username = getpass.getuser()
+                logger.info("Username is {}".format(username))
+
                 subprocess.check_output("sudo chown {}:{} -R {}".format(username, username, install_dir))
+                logger.info("Executing sudo chown {}:{} -R {}".format(username, username, install_dir))
+
                 subprocess.check_output("sudo chmod 775 -R {}".format(install_dir))
+                logger.info("Executing sudo chmod 775 -R {}".format(install_dir))
+
             except Exception as e:
                 logger.critical("Unable to fix permissions issue")
 
-            #after changing the ownership, let's see if we can write to it now.
+            # after changing the ownership, let's see if we can write to it now.
             if not helper.check_writeable(install_dir):
                 logger.critical("{} is still unwritable - Unable to fix permissions issue".format(install_dir))
                 sys.exit(1)
