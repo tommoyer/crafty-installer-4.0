@@ -3,5 +3,5 @@
   "unattended": false,
   "branch": "beta",
   "install_all_software": true,
-  "debug_mode": true
+  "debug_mode": false
 }
