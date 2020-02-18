@@ -18,7 +18,7 @@ with open('config.json', 'r') as fh:
 
 if len(sys.argv) > 1:
     if sys.argv[1] == "-d":
-        defaults['debug'] = True
+        defaults['debug_mode'] = True
         pretty.info("Debug mode turned on")
 
 
