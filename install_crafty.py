@@ -172,13 +172,14 @@ def do_virt_dir_install():
 
 # installs pip requirements via shell script
 def do_pip_install():
-    filename = os.path.join(temp_dir, 'pip_install.sh')
+    filename = os.path.join(starting_dir, 'temp','pip_install.sh')
     venv_dir = os.path.join(install_dir, "venv")
+    repo_dir = os.path.join(install_dir, 'crafty-web')
 
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source {}/bin/activate \n".format(venv_dir)
-    txt += "cd crafty-web \n"
+    txt += "cd {} \n".format(repo_dir)
     txt += "pip3 install --no-cache-dir -r requirements.txt \n"
     with open(filename, 'w') as fh:
         fh.write(txt)
