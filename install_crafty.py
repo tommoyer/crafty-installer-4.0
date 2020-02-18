@@ -16,10 +16,6 @@ with open('config.json', 'r') as fh:
     defaults = json.load(fh)
 
 
-def is_venv():
-    return hasattr(sys, 'real_prefix') or sys.base_prefix != sys.prefix
-
-
 def do_header():
     msg = "-" * 25
     msg += "# \t \t Crafty Controller Linux Installer \t \t #"
@@ -33,10 +29,22 @@ def do_header():
 
 # here we can define other distro shell scripts for even better support
 def do_distro_install(distro):
+    real_dir = os.path.abspath(os.curdir)
+
     if distro == "Ubuntu":
-        subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
+        script = os.path.join(real_dir, 'app', 'ubuntu_install_depends.sh')
     else:
         pretty.warning("Unknown Distro: {}".format(distro))
+
+    logger.info("Running {}".format(script))
+
+    try:
+        resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
+    except Exception as e:
+
+        pretty.critical("Error installing dependencies: {}".format(e))
+        logger.critical("Error installing dependencies: {}".format(e))
+
 
 
 def do_virt_dir_install():
@@ -185,13 +193,6 @@ if __name__ == "__main__":
 
     helper.clear_screen()
     do_header()
-
-    # let's make sure we are not in a venv
-    if is_venv:
-        pretty.critical("Virtual Environment Detected!")
-        pretty.critical("Unable to continue - please exit your virtual Environment")
-        logger.critical("Virtual Environment Detected!")
-        sys.exit(1)
 
     # are we on linux?
     if platform.system() != "Linux":
