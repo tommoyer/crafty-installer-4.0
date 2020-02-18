@@ -245,6 +245,12 @@ if __name__ == "__main__":
     pretty.info("Linux Check Success")
     pretty.info("Python Version Check - {}.{}".format(sys.version_info.major, sys.version_info.minor))
 
+    # check distro
+    if "ubuntu" in str(platform.uname()).lower():
+        pretty.info("Ubuntu detected")
+        distro = "Ubuntu"
+
+
     # default py_check
     py_check = False
 
@@ -253,16 +259,11 @@ if __name__ == "__main__":
         pretty.critical("This script requires Python 3.7 or higher!")
         pretty.critical("You are using Python {}.{}.".format(sys.version_info.major, sys.version_info.minor))
         logger.critical("Python Version < 3.7: {}.{} was found".format(sys.version_info.major, sys.version_info.minor))
+        time.sleep(1)
+        pretty.warning("Your python version didn't check out - do you want us to fix this for you?")
+
     else:
         py_check = True
-
-    # offer ubuntu install
-    if "ubuntu" in str(platform.uname()).lower():
-        pretty.info("Ubuntu detected")
-        distro = "Ubuntu"
-
-        if not py_check:
-            pretty.warning("Your python version didn't check out - do you want us to fix this for you?")
 
         # unattended
         if not defaults['unattended']:
