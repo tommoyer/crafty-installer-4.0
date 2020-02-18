@@ -185,6 +185,11 @@ def do_pip_install():
         fh.write(txt)
         fh.close()
 
+    if helper.check_file_exists(filename):
+        logger.critical("Unable to save pip file!")
+        pretty.critical("Unable to save pip file!")
+        sys.exit(1)
+
     subprocess.check_output("chmod +x {}".format(filename), shell=True)
     pip_output = subprocess.check_output(filename, shell=True)
     logger.info("Pip output: \n{}".format(pip_output))
