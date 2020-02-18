@@ -17,6 +17,11 @@ from app.pretty import pretty
 with open('config.json', 'r') as fh:
     defaults = json.load(fh)
 
+if len(sys.argv) >= 1:
+    if sys.argv[1] == "-d":
+        defaults['debug'] = True
+        pretty.info("Debug mode turned on")
+
 
 #our pretty header
 def do_header():
@@ -55,6 +60,32 @@ def do_distro_install(distro):
 
         pretty.critical("Error installing dependencies: {}".format(e))
         logger.critical("Error installing dependencies: {}".format(e))
+
+# creates the venv and clones the git repo
+def setup_repo():
+    do_header()
+
+    # create new virtual environment
+    pretty.info("Creating New Virtual Environment")
+
+    venv_dir = os.path.join(install_dir, 'venv')
+
+    # changing to install dir
+    os.chdir(install_dir)
+    pretty.info("Jumping into install directory: {}".format(os.path.abspath(os.curdir)))
+    logger.info("Changed directory to: {}".format(os.path.abspath(os.curdir)))
+
+    # creating venv
+    try:
+        subprocess.check_output('virtualenv --python=/usr/bin/python3 {}'.format(venv_dir), shell=True)
+    except Exception as e:
+        logger.critical("Unable to create virtual environment!")
+        logger.critical("Error: {}".format(e))
+        sys.exit(1)
+
+    # cloning the repo
+    pretty.info("Cloning the Git Repo...this could take a few moments")
+    subprocess.check_output('git clone http://gitlab.com/Ptarrant1/crafty-web.git', shell=True)
 
 
 # this switches to the branch chosen and does the pip install and such
@@ -137,43 +168,17 @@ def do_virt_dir_install():
         do_pip_install()
 
     except Exception as e:
-        logger.critical("Unable to checkout branch: dev")
-
-
-# creates the venv and clones the git repo
-def setup_repo():
-    do_header()
-
-    # create new virtual environment
-    pretty.info("Creating New Virtual Environment")
-
-    venv_dir = os.path.join(install_dir, 'venv')
-
-    # changing to install dir
-    os.chdir(install_dir)
-    pretty.info("Jumping into install directory: {}".format(os.path.abspath(os.curdir)))
-    logger.info("Changed directory to: {}".format(os.path.abspath(os.curdir)))
-
-    # creating venv
-    try:
-        subprocess.check_output('virtualenv --python=/usr/bin/python3 {}'.format(venv_dir), shell=True)
-    except Exception as e:
-        logger.critical("Unable to create virtual environment!")
-        logger.critical("Error: {}".format(e))
-        sys.exit(1)
-
-    # cloning the repo
-    pretty.info("Cloning the Git Repo...this could take a few moments")
-    subprocess.check_output('git clone http://gitlab.com/Ptarrant1/crafty-web.git', shell=True)
+        logger.critical("Unable to checkout branch: {}".format(branch))
 
 
 # installs pip requirements via shell script
 def do_pip_install():
     filename = os.path.join(temp_dir, 'pip_install.sh')
+    venv_dir = os.path.join(install_dir, "venv")
 
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
-    txt += "source venv/bin/activate \n"
+    txt += "source {}/bin/activate \n".format(venv_dir)
     txt += "cd crafty-web \n"
     txt += "pip3 install --no-cache-dir -r requirements.txt \n"
     with open(filename, 'w') as fh:
@@ -238,7 +243,7 @@ def get_distro():
 
     # if not, let's hope LSB does
     if not distro:
-        logger.info("lsb_release is".format(lsb_info))
+        logger.info("lsb_release is: {}".format(lsb_info))
         if "ubuntu" in lsb_info:
             pretty.info("Ubuntu detected via lsb_release")
             logger.info("Ubuntu detected via lsb_release")
@@ -272,7 +277,10 @@ if __name__ == "__main__":
     pretty.info("Python Version Check - {}.{}".format(sys.version_info.major, sys.version_info.minor))
 
     distro = get_distro()
-
+    if not distro:
+        pretty.critical("Unable to find distro information")
+        logger.critical("Unable to find distro information")
+        sys.exit(1)
 
     # default py_check
     py_check = False
@@ -455,7 +463,9 @@ if __name__ == "__main__":
 
     pretty.info("Cleaning up temp dir")
     helper.ensure_dir_exists(temp_dir)
-    shutil.rmtree(temp_dir)
+
+    if not defaults['debug_mode']:
+        shutil.rmtree(temp_dir)
 
     pretty.info("Congrats! Crafty is now installed!")
     pretty.info("Your install is located here: {}".format(install_dir))
