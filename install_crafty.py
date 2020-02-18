@@ -222,17 +222,27 @@ def make_update_script():
 
 # get distro
 def get_distro():
-    uname = platform.uname()
+    uname = str(platform.uname())
+    lsb_info = subprocess.check_output('lsb_release -i', shell=True).lower()
+    lsb_info = lsb_info.decode("utf-8")
 
-    distro = "Unknown"
+    distro = False
 
-    pretty.info("Platform is: {}".format(uname))
     logger.info("Platform is: {}".format(uname))
 
-    if "ubuntu" in str(platform.uname()).lower():
-        pretty.info("Ubuntu detected")
-        logger.info("Ubuntu detected")
+    # if uname has the distro
+    if "ubuntu" in uname.lower():
+        pretty.info("Ubuntu detected via uname")
+        logger.info("Ubuntu detected via uname")
         distro = "Ubuntu"
+
+    # if not, let's hope LSB does
+    if not distro:
+        logger.info("lsb_release is".format(lsb_info))
+        if "ubuntu" in lsb_info:
+            pretty.info("Ubuntu detected via lsb_release")
+            logger.info("Ubuntu detected via lsb_release")
+            distro = "Ubuntu"
 
     return distro
 
