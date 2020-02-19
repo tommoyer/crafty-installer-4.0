@@ -142,7 +142,7 @@ def do_pip_install(branch):
     logger.info("Copying PIP install script")
     shutil.copyfile(src, dst)
 
-    pip_command = "{} {}".format(dst,branch)
+    pip_command = "{} '{}' {}".format(dst, install_dir, branch)
 
     logger.info("Chmod +x {}".format(dst))
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
@@ -150,11 +150,10 @@ def do_pip_install(branch):
     logger.info('Running Pip: {}'.format(pip_command))
     try:
         pip_output = subprocess.check_output(pip_command, shell=True)
+        logger.info("Pip output: \n{}".format(pip_output))
 
     except Exception as e:
         logger.error("Pip failed due to error: {}".format(e))
-
-    logger.info("Pip output: \n{}".format(pip_output))
 
     if not defaults['debug_mode']:
         os.remove(dst)
