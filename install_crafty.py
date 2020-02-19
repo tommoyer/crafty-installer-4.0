@@ -173,28 +173,21 @@ def do_virt_dir_install():
 
 # installs pip requirements via shell script
 def do_pip_install():
-    filename = os.path.join(starting_dir, 'temp', 'pip_install.sh')
-    venv_dir = os.path.join(install_dir, "venv")
-    repo_dir = os.path.join(install_dir, 'crafty-web')
-    logger.info("writing pip file to: {}".format(filename))
+    src = os.path.join(starting_dir, 'app', 'pip_install_req.sh')
+    dst = os.path.join(install_dir, 'pip_install_req.sh')
 
-    txt = "#!/bin/bash\n"
-    txt += "cd {}\n".format(install_dir)
-    txt += "source {}/bin/activate \n".format(venv_dir)
-    txt += "cd {} \n".format(repo_dir)
-    txt += "pip3 install --no-cache-dir -r requirements.txt \n"
-    with open(filename, 'w') as fh:
-        fh.write(txt)
-        fh.close()
+    logger.info("Copying PIP install script")
+    shutil.copyfile(src, dst)
 
-    if helper.check_file_exists(filename):
-        logger.critical("Unable to save pip file!")
-        pretty.critical("Unable to save pip file!")
-        sys.exit(1)
+    logger.info("Chmod +x pip install script")
+    subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
-    subprocess.check_output("chmod +x {}".format(filename), shell=True)
-    pip_output = subprocess.check_output(filename, shell=True)
+    logger.info('Running Pip')
+    pip_output = subprocess.check_output(dst, shell=True)
     logger.info("Pip output: \n{}".format(pip_output))
+
+    if not defaults['debug_mode']:
+        os.remove(dst)
 
 
 # Creates the run_crafty.sh
