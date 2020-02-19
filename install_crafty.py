@@ -148,6 +148,7 @@ def do_pip_install(branch):
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
     logger.info('Running Pip: {}'.format(pip_command))
+    pretty.warning("We are now going to install all the python modules for Crafty - This process takes awhile")
     try:
         pip_output = subprocess.check_output(pip_command, shell=True)
         logger.info("Pip output: \n{}".format(pip_output))
