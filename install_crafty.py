@@ -132,12 +132,7 @@ def do_virt_dir_install():
         pretty.info("Way to saddle up cowboy!")
 
     # create a quick script / execute pip install
-    try:
-        do_pip_install(branch)
-
-    except Exception as e:
-        logger.critical("Unable to checkout branch: {}".format(branch))
-
+    do_pip_install(branch)
 
 # installs pip requirements via shell script
 def do_pip_install(branch):
@@ -153,7 +148,11 @@ def do_pip_install(branch):
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
     logger.info('Running Pip: {}'.format(pip_command))
-    pip_output = subprocess.check_output(pip_command, shell=True)
+    try:
+        pip_output = subprocess.check_output(pip_command, shell=True)
+
+    except Exception as e:
+        logger.error("Pip failed due to error: {}".format(e))
 
     logger.info("Pip output: \n{}".format(pip_output))
 
