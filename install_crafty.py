@@ -149,6 +149,9 @@ def do_pip_install(branch):
 
     logger.info('Running Pip: {}'.format(pip_command))
     pretty.warning("We are now going to install all the python modules for Crafty - This process takes awhile")
+
+    time.sleep(3)
+
     try:
         p = subprocess.Popen([pip_command], shell=True, stdout=subprocess.PIPE)
         while True:
