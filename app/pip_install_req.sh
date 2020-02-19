@@ -4,6 +4,7 @@ git checkout $2
 
 source ../venv/bin/activate
 
-while :;do for s in / - \\ \|; do printf "\r$s";pip3 install --no-cache-dir -r requirements.txt;done;done
-
+while true;do echo -n .;sleep 1;done &
+pip3 install --no-cache-dir -r requirements.txt
+kill $!; trap 'kill $!' SIGTERM
 deactivate
