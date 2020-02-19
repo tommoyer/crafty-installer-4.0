@@ -150,8 +150,15 @@ def do_pip_install(branch):
     logger.info('Running Pip: {}'.format(pip_command))
     pretty.warning("We are now going to install all the python modules for Crafty - This process takes awhile")
     try:
-        pip_output = subprocess.check_output(pip_command, shell=True)
-        logger.info("Pip output: \n{}".format(pip_output))
+        p = subprocess.Popen([pip_command], stdout=subprocess.PIPE)
+        while True:
+            line = p.stdout.readline()
+            if not line:
+                break
+            print(line)
+
+        # pip_output = subprocess.check_output(pip_command, shell=True)
+        # logger.info("Pip output: \n{}".format(pip_output))
 
     except Exception as e:
         logger.error("Pip failed due to error: {}".format(e))
