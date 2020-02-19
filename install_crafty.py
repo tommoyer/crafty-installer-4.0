@@ -172,9 +172,10 @@ def do_virt_dir_install():
 
 # installs pip requirements via shell script
 def do_pip_install():
-    filename = os.path.join(starting_dir, 'temp','pip_install.sh')
+    filename = os.path.join(starting_dir, 'temp', 'pip_install.sh')
     venv_dir = os.path.join(install_dir, "venv")
     repo_dir = os.path.join(install_dir, 'crafty-web')
+    logger.info("writing pip file to: {}".format(filename))
 
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
