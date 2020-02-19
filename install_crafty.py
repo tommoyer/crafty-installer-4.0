@@ -140,6 +140,7 @@ def do_virt_dir_install():
         pretty.info("Way to saddle up cowboy!")
         try:
             git_output = subprocess.check_output('git checkout dev', shell=True)
+            logger.info("Git checkout output: {}".format(git_output))
         except Exception as e:
             logger.critical("Unable to checkout branch: dev")
 
