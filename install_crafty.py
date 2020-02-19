@@ -155,7 +155,7 @@ def do_pip_install(branch):
             line = p.stdout.readline()
             if not line:
                 break
-            print(line)
+            print(line.decode("utf-8"))
 
         # pip_output = subprocess.check_output(pip_command, shell=True)
         # logger.info("Pip output: \n{}".format(pip_output))
