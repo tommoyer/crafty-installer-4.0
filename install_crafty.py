@@ -124,66 +124,37 @@ def do_virt_dir_install():
 
     elif branch == "beta":
         pretty.info("The beta branch is a great choice")
-        try:
-            git_output = subprocess.check_output('git checkout beta', shell=True)
-        except Exception as e:
-            logger.critical("Unable to checkout branch: beta")
 
     elif branch == 'snaps':
         pretty.info("Snaps is where the cool kids hangout")
-        try:
-            git_output = subprocess.check_output('git checkout snapshot', shell=True)
-        except Exception as e:
-            logger.critical("Unable to checkout branch: snapshot")
 
     elif branch == 'dev':
         pretty.info("Way to saddle up cowboy!")
-        try:
-            git_output = subprocess.check_output('git checkout dev', shell=True)
-            logger.info("Git checkout output: {}".format(git_output))
-        except Exception as e:
-            logger.critical("Unable to checkout branch: dev")
-
-    # let's give older systems time to update
-    time.sleep(3)
-
-    if 'fatal' in str(git_output):
-        logger.warning("Something with the git pull broke - got fatal warning")
-        pretty.warning("Git pull broke, unable to checkout branch {}".format(branch))
-        pretty.warning("You can still continue, but are stuck on the master branch for now.")
-
-    logger.info("Installing Pip Requirements")
-    pretty.info("Installing Pip Requirements to your virtual environment...This could take a few moments")
-
-    requirements_file = os.path.join(install_dir, 'crafty-web', 'requirements.txt')
-    if helper.check_file_exists(requirements_file):
-        logger.info("requirements.txt file exits")
-    else:
-        logger.critical("unable to find requirements.txt file in: {}".format(os.path.abspath(os.curdir)))
-        pretty.critical("unable to find requirements.txt file in: {}".format(os.path.abspath(os.curdir)))
-        sys.exit(1)
 
     # create a quick script / execute pip install
     try:
-        do_pip_install()
+        do_pip_install(branch)
 
     except Exception as e:
         logger.critical("Unable to checkout branch: {}".format(branch))
 
 
 # installs pip requirements via shell script
-def do_pip_install():
+def do_pip_install(branch):
     src = os.path.join(starting_dir, 'app', 'pip_install_req.sh')
     dst = os.path.join(install_dir, 'pip_install_req.sh')
 
     logger.info("Copying PIP install script")
     shutil.copyfile(src, dst)
 
-    logger.info("Chmod +x pip install script")
+    pip_command = "{} {}".format(dst,branch)
+
+    logger.info("Chmod +x {}".format(dst))
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
-    logger.info('Running Pip')
-    pip_output = subprocess.check_output(dst, shell=True)
+    logger.info('Running Pip: {}'.format(pip_command))
+    pip_output = subprocess.check_output(pip_command, shell=True)
+
     logger.info("Pip output: \n{}".format(pip_output))
 
     if not defaults['debug_mode']:
