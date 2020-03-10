@@ -179,7 +179,7 @@ def make_startup_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-web \n"
-    txt += "python crafty.py \n"
+    txt += "python{}.{} crafty.py \n".format(sys.version_info.major, sys.version_info.minor)
     with open("run_crafty.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
