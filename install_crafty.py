@@ -205,11 +205,69 @@ def make_update_script():
     subprocess.check_output("chmod +x *.sh", shell=True)
 
 
+# Creates the run as a service.sh
+def make_service_script():
+    os.chdir(install_dir)
+    logger.info("Changing to {}".format(os.path.abspath(os.curdir)))
+
+    txt = "#!/bin/bash\n"
+    txt += "cd {}\n".format(install_dir)
+    txt += "source venv/bin/activate \n"
+    txt += "cd crafty-web \n"
+    txt += "python crafty.py -d\n"
+    with open("run_crafty_service.sh", 'w') as fh:
+        fh.write(txt)
+        fh.close()
+
+    subprocess.check_output("chmod +x *.sh", shell=True)
+
+
+def make_service_file():
+    os.chdir(install_dir)
+    logger.info("Changing to {}".format(os.path.abspath(os.curdir)))
+    txt = """
+[Unit]
+Description=Crafty Controller
+After=network.target
+
+[Service]
+Type=simple
+
+User=crafty
+WorkingDirectory={installdir}
+
+ExecStart={install_dir}/run_crafty_service.sh
+
+Restart=on-failure
+# Other restart options: always, on-abort, etc
+
+# The install section is needed to use
+# `systemctl enable` to start on boot
+# For a user service that you want to enable
+# and start automatically, use `default.target`
+# For system level services, use `multi-user.target`
+[Install]
+WantedBy=multi-user.target
+""".format(install_dir=install_dir)
+
+    with open("crafty.service", 'w') as fh:
+        fh.write(txt)
+        fh.close()
+
+    subprocess.check_output("cp crafty.service /etc/systemd/system/crafty.service", shell=True)
+
+
 # get distro
 def get_distro():
     uname = str(platform.uname())
-    lsb_info = subprocess.check_output('lsb_release -i', shell=True).lower()
-    lsb_info = lsb_info.decode("utf-8")
+
+    try:
+        lsb_info = subprocess.check_output('lsb_release -i', shell=True).lower()
+        lsb_info = lsb_info.decode("utf-8")
+    except Exception as e:
+        pretty.critical("Unable to get LSB info from lsb_release.")
+        logger.critical("Unable to get LSB info: {}".format(e))
+        return False
 
     distro = False
 
@@ -258,7 +316,7 @@ if __name__ == "__main__":
 
     distro = get_distro()
     if not distro:
-        pretty.critical("Unable to find distro information")
+        pretty.critical("Unable to find distro information, or your distro is not supported.")
         logger.critical("Unable to find distro information")
         sys.exit(1)
 
@@ -438,6 +496,12 @@ if __name__ == "__main__":
     make_startup_script()
     make_update_script()
 
+    service_answer = helper.get_user_valid_input("Would you like to make a service file for Crafty?", ['y', 'n'])
+    if service_answer == "y":
+        make_service_script()
+        make_service_file()
+
+
     time.sleep(1)
     do_header()
 
@@ -451,6 +515,12 @@ if __name__ == "__main__":
     pretty.info("Your install is located here: {}".format(install_dir))
     pretty.info("You can run crafty by running {}".format(os.path.join(install_dir, "run_crafty.sh")))
     pretty.info("You can update crafty by running {}".format(os.path.join(install_dir, "update_crafty.sh")))
+    if service_answer:
+        pretty.info("A service unit file has been saved in /etc/systemd/system/crafty.service")
+        pretty.info("You will need to run Crafty once normally to get the admin password before enabling the service")
+        pretty.info("run this command to enable crafty as a service- 'sudo systemctrl enable crafty.service' ")
+        pretty.info("run this command to start the crafty service- 'sudo systemctrl start crafty.service' ")
+
 
 
 
