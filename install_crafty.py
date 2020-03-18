@@ -53,8 +53,15 @@ def do_distro_install(distro):
 
     logger.info("Running {}".format(script))
 
+    #resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
     try:
-        resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
+        p = subprocess.Popen('app/ubuntu_install_depends.sh', shell=True, stdout=subprocess.PIPE)
+        while True:
+            line = p.stdout.readline()
+            if not line:
+                break
+            print(line.decode("utf-8"))
+
     except Exception as e:
 
         pretty.critical("Error installing dependencies: {}".format(e))
