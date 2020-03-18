@@ -84,7 +84,7 @@ def setup_repo():
 
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
-    subprocess.check_output('git clone http://gitlab.com/Ptarrant1/crafty-web.git', shell=True)
+    subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-web.git', shell=True)
 
 
 # this switches to the branch chosen and does the pip install and such
@@ -179,7 +179,7 @@ def make_startup_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-web \n"
-    txt += "python crafty.py \n"
+    txt += "python{}.{} crafty.py \n".format(sys.version_info.major, sys.version_info.minor)
     with open("run_crafty.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
