@@ -393,16 +393,13 @@ if __name__ == "__main__":
                 # make a temp dir
                 helper.ensure_dir_exists(temp_dir)
 
-                username = getpass.getuser()
-                logger.info("Username is {}".format(username))
-
                 # let's create a quick sh script to create the dir as root, and then chown the dir to the current user
                 fix_perms_sh = os.path.join(temp_dir, 'fix_perms.sh')
 
                 with open(fix_perms_sh, 'w') as fh:
                     txt = "#!/bin/bash\n"
                     txt += "sudo mkdir -p {}\n".format(install_dir)
-                    txt += "sudo chown {}:{} {}\n".format(username, username, install_dir)
+                    txt += "sudo chown crafty:crafty {}\n".format(install_dir)
                     fh.write(txt)
                     fh.close()
 
@@ -519,6 +516,7 @@ if __name__ == "__main__":
         shutil.rmtree(temp_dir)
 
     pretty.info("Congrats! Crafty is now installed!")
+    pretty.info("We created a user called 'crafty' for you to run crafty as.")
     pretty.info("Your install is located here: {}".format(install_dir))
     pretty.info("You can run crafty by running {}".format(os.path.join(install_dir, "run_crafty.sh")))
     pretty.info("You can update crafty by running {}".format(os.path.join(install_dir, "update_crafty.sh")))
