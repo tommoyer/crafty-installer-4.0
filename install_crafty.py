@@ -241,9 +241,9 @@ After=network.target
 Type=simple
 
 User=crafty
-WorkingDirectory={installdir}
+WorkingDirectory={0}
 
-ExecStart={install_dir}/run_crafty_service.sh
+ExecStart={0}/run_crafty_service.sh
 
 Restart=on-failure
 # Other restart options: always, on-abort, etc
@@ -255,7 +255,7 @@ Restart=on-failure
 # For system level services, use `multi-user.target`
 [Install]
 WantedBy=multi-user.target
-""".format(install_dir=install_dir)
+""".format(install_dir)
 
     with open("crafty.service", 'w') as fh:
         fh.write(txt)
