@@ -32,7 +32,7 @@ def do_header():
     msg += "# \t \t Crafty Controller Linux Installer \t \t #"
     msg += "-" * 25
     msg += "\n \t\t\t This program will install Crafty Controller on your Linux Machine"
-    msg += "\n \t\t\t This program isn't perfect, but will do it's best to get you up an running"
+    msg += "\n \t\t\t This program isn't perfect, but it will do it's best to get you up an running"
 
     msg += "\n"
     pretty.header(msg)
@@ -42,8 +42,8 @@ def do_header():
 def do_distro_install(distro):
     real_dir = os.path.abspath(os.curdir)
 
-    pretty.warning("This install could take a long time depending on how out dated your system is.")
-    pretty.warning("Please be patient and do not exit the install or things may break")
+    pretty.warning("This install could take a long time depending on how old your system is.")
+    pretty.warning("Please be patient and do not exit the installer otherwise things may break")
 
     if distro == "Ubuntu":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
@@ -155,7 +155,7 @@ def do_pip_install(branch):
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
     logger.info('Running Pip: {}'.format(pip_command))
-    pretty.warning("We are now going to install all the python modules for Crafty - This process takes awhile")
+    pretty.warning("We are now going to install all the python modules for Crafty - This process can take awhile depending on your internet connection")
 
     time.sleep(3)
 
@@ -357,7 +357,7 @@ if __name__ == "__main__":
     do_header()
 
     # do we want to install to default dir?
-    pretty.info("Craftys Default install directory is set to: {}".format(defaults['install_dir']))
+    pretty.info("Crafty's Default install directory is set to: {}".format(defaults['install_dir']))
 
     # unattended
     if not defaults['unattended']:
@@ -370,7 +370,7 @@ if __name__ == "__main__":
     do_header()
 
     if install_dir == 'n':
-        install_dir = helper.get_user_open_input("Where would you like Crafty to install?")
+        install_dir = helper.get_user_open_input("Where would you like Crafty to install to?")
     else:
         install_dir = defaults['install_dir']
 
@@ -522,9 +522,9 @@ if __name__ == "__main__":
     pretty.info("You can update crafty by running {}".format(os.path.join(install_dir, "update_crafty.sh")))
     if service_answer:
         pretty.info("A service unit file has been saved in /etc/systemd/system/crafty.service")
-        pretty.info("You will need to run Crafty once normally to get the admin password before enabling the service")
-        pretty.info("run this command to enable crafty as a service- 'sudo systemctrl enable crafty.service' ")
-        pretty.info("run this command to start the crafty service- 'sudo systemctrl start crafty.service' ")
+        pretty.info("You will need to run Crafty once normally to get the admin password before enabling the service or running the command 'sudo systemctl status crafty.service' after starting the service")
+        pretty.info("run this command to enable crafty as a service- 'sudo systemctl enable crafty.service' ")
+        pretty.info("run this command to start the crafty service- 'sudo systemctl start crafty.service' ")
 
 
 
