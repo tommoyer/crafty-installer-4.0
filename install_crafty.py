@@ -48,6 +48,10 @@ def do_distro_install(distro):
     if distro == "Ubuntu":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'ubuntu_install_depends.sh')
+    elif distro == "Debian":
+        pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
+        pretty.warning("This will only work on Debian 10")
+        script = os.path.join(real_dir, 'app', 'debian10_install_depends.sh')
     else:
         pretty.warning("Unknown Distro: {}".format(distro))
 
@@ -55,7 +59,7 @@ def do_distro_install(distro):
 
     #resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
     try:
-        p = subprocess.Popen('app/ubuntu_install_depends.sh', shell=True, stdout=subprocess.PIPE)
+        p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE)
         while True:
             line = p.stdout.readline()
             if not line:
@@ -221,7 +225,7 @@ def make_service_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-web \n"
-    txt += "python crafty.py -d\n"
+    txt += "python{}.{} crafty.py -d\n".format(sys.version_info.major, sys.version_info.minor)
     with open("run_crafty_service.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
@@ -285,6 +289,10 @@ def get_distro():
         pretty.info("Ubuntu detected via uname")
         logger.info("Ubuntu detected via uname")
         distro = "Ubuntu"
+    elif "debian" in uname.lower():
+        pretty.info("Debian detected via uname")
+        logger.info("Debian detected via uname")
+        distro = "Debian"
 
     # if not, let's hope LSB does
     if not distro:
@@ -293,6 +301,10 @@ def get_distro():
             pretty.info("Ubuntu detected via lsb_release")
             logger.info("Ubuntu detected via lsb_release")
             distro = "Ubuntu"
+        elif "debian" in lsb_info:
+            pretty.info("Debian detected via lsb_release")
+            logger.info("Debian detected via lsb_release")
+            distro = "Debian"
 
     return distro
 
