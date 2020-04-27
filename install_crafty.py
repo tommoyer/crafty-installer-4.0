@@ -289,7 +289,7 @@ def get_distro():
         pretty.info("Ubuntu detected via uname")
         logger.info("Ubuntu detected via uname")
         distro = "Ubuntu"
-    elif "debian" in uname.lower():
+    elif "debian" or "raspbian" or "dietpi" in uname.lower():
         pretty.info("Debian detected via uname")
         logger.info("Debian detected via uname")
         distro = "Debian"
@@ -301,7 +301,7 @@ def get_distro():
             pretty.info("Ubuntu detected via lsb_release")
             logger.info("Ubuntu detected via lsb_release")
             distro = "Ubuntu"
-        elif "debian" in lsb_info:
+        elif "debian" or "raspbian" or "dietpi" in lsb_info:
             pretty.info("Debian detected via lsb_release")
             logger.info("Debian detected via lsb_release")
             distro = "Debian"
