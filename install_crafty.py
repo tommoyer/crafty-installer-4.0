@@ -37,6 +37,15 @@ def do_header():
     msg += "\n"
     pretty.header(msg)
 
+def get_valid_input(question: str, answers: list ):
+    valid = False
+
+    while not valid:
+        response = input("{} - {}: ".format(question, answers))
+
+        if int(response) in list(answers):
+            return int(response)
+
 
 # here we can define other distro shell scripts for even better support
 def do_distro_install(distro):
@@ -270,41 +279,16 @@ WantedBy=multi-user.target
 
 # get distro
 def get_distro():
-    uname = str(platform.uname())
-
-    try:
-        lsb_info = subprocess.check_output('lsb_release -i', shell=True).lower()
-        lsb_info = lsb_info.decode("utf-8")
-    except Exception as e:
-        pretty.critical("Unable to get LSB info from lsb_release.")
-        logger.critical("Unable to get LSB info: {}".format(e))
-        return False
-
-    distro = False
-
-    logger.info("Platform is: {}".format(uname))
-
-    # if uname has the distro
-    if "ubuntu" in uname.lower():
-        pretty.info("Ubuntu detected via uname")
-        logger.info("Ubuntu detected via uname")
+    resp = get_valid_input("Please enter your Linux Distro \n 1=Ubuntu \n 2=Debian \n",[1,2])
+    print(resp)
+    if resp == 1:
+        pretty.info("Ubuntu Selected")
+        logger.info("Ubuntu Selected")
         distro = "Ubuntu"
-    elif "debian" or "raspbian" or "dietpi" in uname.lower():
-        pretty.info("Debian detected via uname")
-        logger.info("Debian detected via uname")
+    else:
+        pretty.info("Debian Selected")
+        logger.info("Debian Selected")
         distro = "Debian"
-
-    # if not, let's hope LSB does
-    if not distro:
-        logger.info("lsb_release is: {}".format(lsb_info))
-        if "ubuntu" in lsb_info:
-            pretty.info("Ubuntu detected via lsb_release")
-            logger.info("Ubuntu detected via lsb_release")
-            distro = "Ubuntu"
-        elif "debian" or "raspbian" or "dietpi" in lsb_info:
-            pretty.info("Debian detected via lsb_release")
-            logger.info("Debian detected via lsb_release")
-            distro = "Debian"
 
     return distro
 
@@ -537,8 +521,4 @@ if __name__ == "__main__":
         pretty.info("You will need to run Crafty once normally to get the admin password before enabling the service or running the command 'sudo systemctl status crafty.service' after starting the service")
         pretty.info("run this command to enable crafty as a service- 'sudo systemctl enable crafty.service' ")
         pretty.info("run this command to start the crafty service- 'sudo systemctl start crafty.service' ")
-
-
-
-
 
