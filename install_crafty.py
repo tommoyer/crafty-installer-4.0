@@ -514,6 +514,9 @@ if __name__ == "__main__":
         make_service_script()
         make_service_file()
 
+    # fixing permission issues
+    cmd = "sudo chown crafty:crafty -R {dir} && sudo chmod 2775 -R {dir}".format(dir=install_dir)
+    subprocess.check_output(cmd, shell=True)
 
     time.sleep(1)
     do_header()
