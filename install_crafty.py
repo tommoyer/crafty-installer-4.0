@@ -8,7 +8,6 @@ import shutil
 import platform
 import logging
 import subprocess
-import getpass
 
 from app.helper import helper
 from app.pretty import pretty
@@ -36,6 +35,7 @@ def do_header():
 
     msg += "\n"
     pretty.header(msg)
+
 
 def get_valid_input(question: str, answers: list ):
     valid = False
@@ -504,6 +504,10 @@ if __name__ == "__main__":
 
     time.sleep(1)
     do_header()
+
+    # fix permission issues
+    cmd = "chown crafty:crafty -R {dir} && chmod 2775 -R {dir}".format(dir=install_dir)
+    subprocess.check_output(cmd, shell=True)
 
     pretty.info("Cleaning up temp dir")
     helper.ensure_dir_exists(temp_dir)
