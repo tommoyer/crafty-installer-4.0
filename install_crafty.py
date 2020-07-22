@@ -56,11 +56,12 @@ def do_distro_install(distro):
 
     if distro == "Ubuntu":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
-        script = os.path.join(real_dir, 'app', 'ubuntu_install_depends.sh')
+        script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
+
     elif distro == "Debian":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
-        pretty.warning("This will only work on Debian 10")
-        script = os.path.join(real_dir, 'app', 'debian10_install_depends.sh')
+        script = os.path.join(real_dir, 'app', 'debian10.sh')
+
     else:
         pretty.warning("Unknown Distro: {}".format(distro))
 
@@ -279,18 +280,30 @@ WantedBy=multi-user.target
 
 # get distro
 def get_distro():
-    resp = get_valid_input("Please enter your Linux Distro \n 1=Ubuntu \n 2=Debian \n",[1,2])
-    print(resp)
-    if resp == 1:
-        pretty.info("Ubuntu Selected")
-        logger.info("Ubuntu Selected")
-        distro = "Ubuntu"
-    else:
-        pretty.info("Debian Selected")
-        logger.info("Debian Selected")
-        distro = "Debian"
+    resp = get_valid_input('''
+Please enter your Linux Distro
+    1=Ubuntu 18.04 
+    2=Debian 10 
+    3=Ubuntu 20.04 
+    ''',
+[1,2,3]
+)
+    
+    file = None
 
-    return distro
+    if resp == 1:
+        logger.info("Ubuntu 18.04 Selected")
+        file = "ubuntu_18_04.sh"
+
+    elif resp == 2:
+        logger.info("Debian 10 'Stretch' Selected")
+        file = "debian_10.sh"
+
+    elif resp == 3:
+        logger.info("Ubuntu 20.04 Selected")
+        file = "ubuntu_20_04.sh"
+
+    return file
 
 if __name__ == "__main__":
 
