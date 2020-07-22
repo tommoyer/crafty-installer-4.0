@@ -54,11 +54,11 @@ def do_distro_install(distro):
     pretty.warning("This install could take a long time depending on how old your system is.")
     pretty.warning("Please be patient and do not exit the installer otherwise things may break")
 
-    if distro == "Ubuntu":
+    if distro == "ubuntu_18_04.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
 
-    elif distro == "Debian":
+    elif distro == "debian10.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'debian10.sh')
 
@@ -360,7 +360,7 @@ if __name__ == "__main__":
         do_distro_install(distro)
     else:
         if not py_check:
-            pretty.critical("This script requires Python 3.7 or higher!")
+            pretty.critical("This script requires Python 3.6 or higher!")
             sys.exit(1)
 
     do_header()
