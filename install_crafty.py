@@ -62,8 +62,13 @@ def do_distro_install(distro):
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'debian10.sh')
 
+    elif distro == "ubuntu_20_04.sh":
+        pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
+        script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
+
     else:
-        pretty.warning("Unknown Distro: {}".format(distro))
+        pretty.critical("Unknown Distro: {}".format(distro))
+        sys.exit(1)
 
     logger.info("Running {}".format(script))
 
