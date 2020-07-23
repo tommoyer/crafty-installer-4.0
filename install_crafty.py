@@ -54,15 +54,21 @@ def do_distro_install(distro):
     pretty.warning("This install could take a long time depending on how old your system is.")
     pretty.warning("Please be patient and do not exit the installer otherwise things may break")
 
-    if distro == "Ubuntu":
+    if distro == "ubuntu_18_04.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
-        script = os.path.join(real_dir, 'app', 'ubuntu_install_depends.sh')
-    elif distro == "Debian":
+        script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
+
+    elif distro == "debian10.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
-        pretty.warning("This will only work on Debian 10")
-        script = os.path.join(real_dir, 'app', 'debian10_install_depends.sh')
+        script = os.path.join(real_dir, 'app', 'debian10.sh')
+
+    elif distro == "ubuntu_20_04.sh":
+        pretty.info("We are updating Apt, python3.8, open-jdk, pip, and virtualenv")
+        script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
+
     else:
-        pretty.warning("Unknown Distro: {}".format(distro))
+        pretty.critical("Unknown Distro: {}".format(distro))
+        sys.exit(1)
 
     logger.info("Running {}".format(script))
 
@@ -279,18 +285,30 @@ WantedBy=multi-user.target
 
 # get distro
 def get_distro():
-    resp = get_valid_input("Please enter your Linux Distro \n 1=Ubuntu \n 2=Debian \n",[1,2])
-    print(resp)
-    if resp == 1:
-        pretty.info("Ubuntu Selected")
-        logger.info("Ubuntu Selected")
-        distro = "Ubuntu"
-    else:
-        pretty.info("Debian Selected")
-        logger.info("Debian Selected")
-        distro = "Debian"
+    resp = get_valid_input('''
+Please enter your Linux Distro
+    1=Ubuntu 18.04 
+    2=Debian 10 
+    3=Ubuntu 20.04 
+    ''',
+[1,2,3]
+)
+    
+    file = None
 
-    return distro
+    if resp == 1:
+        logger.info("Ubuntu 18.04 Selected")
+        file = "ubuntu_18_04.sh"
+
+    elif resp == 2:
+        logger.info("Debian 10 'Stretch' Selected")
+        file = "debian_10.sh"
+
+    elif resp == 3:
+        logger.info("Ubuntu 20.04 Selected")
+        file = "ubuntu_20_04.sh"
+
+    return file
 
 if __name__ == "__main__":
 
@@ -347,7 +365,7 @@ if __name__ == "__main__":
         do_distro_install(distro)
     else:
         if not py_check:
-            pretty.critical("This script requires Python 3.7 or higher!")
+            pretty.critical("This script requires Python 3.6 or higher!")
             sys.exit(1)
 
     do_header()
@@ -501,6 +519,9 @@ if __name__ == "__main__":
         make_service_script()
         make_service_file()
 
+    # fixing permission issues
+    cmd = "sudo chown crafty:crafty -R {dir} && sudo chmod 2775 -R {dir}".format(dir=install_dir)
+    subprocess.check_output(cmd, shell=True)
 
     time.sleep(1)
     do_header()

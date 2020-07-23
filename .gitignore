@@ -2,7 +2,9 @@
 /venv/
 
 #ignore .idea from pycharm
-.idea/
+/.idea/*
+
+>>>>>>> dev
 
 #ignore pycache
 __pycache__/
