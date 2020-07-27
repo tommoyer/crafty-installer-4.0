@@ -58,9 +58,9 @@ def do_distro_install(distro):
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
 
-    elif distro == "debian10.sh":
+    elif distro == "debian_10.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
-        script = os.path.join(real_dir, 'app', 'debian10.sh')
+        script = os.path.join(real_dir, 'app', 'debian_10.sh')
 
     elif distro == "ubuntu_20_04.sh":
         pretty.info("We are updating Apt, python3.8, open-jdk, pip, and virtualenv")
@@ -301,7 +301,7 @@ Please enter your Linux Distro
         file = "ubuntu_18_04.sh"
 
     elif resp == 2:
-        logger.info("Debian 10 'Stretch' Selected")
+        logger.info("Debian 10 'Buster' Selected")
         file = "debian_10.sh"
 
     elif resp == 3:
