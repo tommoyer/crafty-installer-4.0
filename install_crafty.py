@@ -4,6 +4,7 @@ import os
 import sys
 import json
 import time
+import distro as pydistro
 import shutil
 import platform
 import logging
@@ -23,6 +24,7 @@ if len(sys.argv) > 1:
 
 #our pretty header
 def do_header():
+    time.sleep(2)
 
     if not defaults['debug_mode']:
         helper.clear_screen()
@@ -53,6 +55,8 @@ def do_distro_install(distro):
 
     pretty.warning("This install could take a long time depending on how old your system is.")
     pretty.warning("Please be patient and do not exit the installer otherwise things may break")
+
+
 
     if distro == "ubuntu_18_04.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
@@ -285,29 +289,31 @@ WantedBy=multi-user.target
 
 # get distro
 def get_distro():
-    resp = get_valid_input('''
-Please enter your Linux Distro
-    1=Ubuntu 18.04 
-    2=Debian 10 
-    3=Ubuntu 20.04 
-    ''',
-[1,2,3]
-)
-    
-    file = None
+    id = pydistro.id()
+    version = pydistro.version()
+    print("We detected your os is: {id} Version: {version}".format(id=id,version=version))
 
-    if resp == 1:
-        logger.info("Ubuntu 18.04 Selected")
-        file = "ubuntu_18_04.sh"
+    if id == "debian":
+        if version == "10":
+            logger.info("Debian 10 'Buster' Detected")
+            file = "debian_10.sh"
+        else:
+            logger.critical("Unsupported Debian")
+            return False
 
-    elif resp == 2:
-        logger.info("Debian 10 'Buster' Selected")
-        file = "debian_10.sh"
-
-    elif resp == 3:
-        logger.info("Ubuntu 20.04 Selected")
-        file = "ubuntu_20_04.sh"
-
+    elif id == "ubuntu":
+        if version == "18.04":
+            logger.info("Ubuntu 18.04 Detected")
+            file = "ubuntu_18_04.sh"
+        elif version == "20.04":
+            logger.info("Ubuntu 20.04 Detected")
+            file = "ubuntu_20_04.sh"
+        else:
+            logger.critical("Unsupported Ubuntu")
+            return False
+    else:
+        logger.critical("Unable to determine distro")
+        return False
     return file
 
 if __name__ == "__main__":

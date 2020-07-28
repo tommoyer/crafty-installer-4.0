@@ -27,3 +27,4 @@ elif [ "${fail}" -eq 0 ];then
 else
     echo "Something really bad broke. (fail value is ${fail}). Please report this error to the developer"
 fi
+
