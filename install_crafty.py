@@ -4,6 +4,7 @@ import os
 import sys
 import json
 import time
+import distro
 import shutil
 import platform
 import logging
@@ -285,29 +286,34 @@ WantedBy=multi-user.target
 
 # get distro
 def get_distro():
-    resp = get_valid_input('''
-Please enter your Linux Distro
-    1=Ubuntu 18.04 
-    2=Debian 10 
-    3=Ubuntu 20.04 
-    ''',
-[1,2,3]
-)
-    
-    file = None
-
-    if resp == 1:
-        logger.info("Ubuntu 18.04 Selected")
-        file = "ubuntu_18_04.sh"
-
-    elif resp == 2:
-        logger.info("Debian 10 'Buster' Selected")
-        file = "debian_10.sh"
-
-    elif resp == 3:
-        logger.info("Ubuntu 20.04 Selected")
-        file = "ubuntu_20_04.sh"
-
+    id = distro.id()
+    version = distro.version()
+    print(f"ID: {id} Version: {version}")
+    # get distro
+    if id == "debian":
+        if version == "10":
+            # logger.info("Debian 10 'Buster' Selected")
+            file = "debian_10.sh"
+        else:
+            file = "error debian"
+            # pretty.critical("Unsupported version: {}".format(distro))
+            # sys.exit(1)
+    elif id == "ubuntu":
+        if version == "18.04":
+            # logger.info("Ubuntu 18.04 Selected")
+            file = "ubuntu_18_04.sh"
+        elif version == "20.04":
+            # logger.info("Ubuntu 20.04 Selected")
+            file = "ubuntu_20_04.sh"
+        else:
+            file = "error Ubuntu"
+            # pretty.critical("Unsupported version: {}".format(distro))
+            # sys.exit(1)
+    else:
+        file = "error distro"
+        pretty.critical("Unknown Distro: {}".format(distro))
+        sys.exit(1)
+    #print(f"Ouput: {file}")
     return file
 
 if __name__ == "__main__":
