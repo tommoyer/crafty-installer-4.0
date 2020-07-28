@@ -342,7 +342,7 @@ if __name__ == "__main__":
     pretty.info("Python Version Check - {}.{}".format(sys.version_info.major, sys.version_info.minor))
 
     system_distro = get_distro()
-    if not system_:
+    if not system_distro:
         pretty.critical("Unable to find distro information, or your distro is not supported.")
         logger.critical("Unable to find distro information")
         sys.exit(1)
