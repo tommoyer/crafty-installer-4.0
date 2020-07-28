@@ -55,6 +55,8 @@ def do_distro_install(distro):
     pretty.warning("This install could take a long time depending on how old your system is.")
     pretty.warning("Please be patient and do not exit the installer otherwise things may break")
 
+    time.sleep(10)
+
     if distro == "ubuntu_18_04.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
         script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
