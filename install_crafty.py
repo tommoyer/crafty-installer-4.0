@@ -24,7 +24,7 @@ if len(sys.argv) > 1:
 
 #our pretty header
 def do_header():
-    time.sleep(5)
+    time.sleep(2)
 
     if not defaults['debug_mode']:
         helper.clear_screen()
