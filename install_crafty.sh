@@ -4,6 +4,6 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 else
   sudo apt install python-pip -y
-  pip install distro
+  pip3 install distro
   python3 install_crafty.py
 fi
