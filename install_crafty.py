@@ -24,6 +24,7 @@ if len(sys.argv) > 1:
 
 #our pretty header
 def do_header():
+    time.sleep(5)
 
     if not defaults['debug_mode']:
         helper.clear_screen()
@@ -55,7 +56,7 @@ def do_distro_install(distro):
     pretty.warning("This install could take a long time depending on how old your system is.")
     pretty.warning("Please be patient and do not exit the installer otherwise things may break")
 
-    time.sleep(10)
+
 
     if distro == "ubuntu_18_04.sh":
         pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
