@@ -7,3 +7,4 @@ else
   pip3 install distro
   python3 install_crafty.py
 fi
+

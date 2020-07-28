@@ -4,7 +4,7 @@ import os
 import sys
 import json
 import time
-import distro
+import distro as pydistro
 import shutil
 import platform
 import logging
@@ -286,8 +286,8 @@ WantedBy=multi-user.target
 
 # get distro
 def get_distro():
-    id = distro.id()
-    version = distro.version()
+    id = pydistro.id()
+    version = pydistro.version()
     print(f"ID: {id} Version: {version}")
     # get distro
     if id == "debian":
@@ -341,8 +341,8 @@ if __name__ == "__main__":
     pretty.info("Linux Check Success")
     pretty.info("Python Version Check - {}.{}".format(sys.version_info.major, sys.version_info.minor))
 
-    system_distro = get_distro()
-    if not system_distro:
+    distro = get_distro()
+    if not distro:
         pretty.critical("Unable to find distro information, or your distro is not supported.")
         logger.critical("Unable to find distro information")
         sys.exit(1)
@@ -362,13 +362,13 @@ if __name__ == "__main__":
 
     # unattended
     if not defaults['unattended']:
-        install_requirements = helper.get_user_valid_input("Install {} requirements?".format(system_), ['y', 'n'])
+        install_requirements = helper.get_user_valid_input("Install {} requirements?".format(distro), ['y', 'n'])
     else:
         install_requirements = 'y'
 
     if install_requirements == "y":
         pretty.info("Installing required packages for {} - Please enter sudo password when prompted".format(distro))
-        do_distro_install(system_distro)
+        do_distro_install(distro)
     else:
         if not py_check:
             pretty.critical("This script requires Python 3.6 or higher!")
