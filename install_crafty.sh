@@ -1,10 +1,30 @@
 #!/bin/bash
-if [[ $EUID -ne 0 ]]; then
-   echo "Apologies - This script must be run as root"
-   exit 1
+sudo -v
+sudo_test="$?"
+if [ "${sudo_test}" -eq 127 ];then
+    echo "ERROR: sudo is required for installation."
+    fail=1
+elif [ "${sudo_test}" -eq 1 ];then
+    echo "Apologies - your system seems to have restricted sudo commands from your user"
+    fail=1
+elif [ "${sudo_test}" -eq 0 ];then
+    fail=0
 else
-  sudo apt install python3-pip -y
-  pip3 install distro
-  python3 install_crafty.py
+    echo "Something really bad broke. (sudo_test is ${sudo_test}). Please report this error to the developer"
+fi
+
+if [ "${fail}" -eq 1 ];then
+    echo "Please see the documentation for details:"
+    echo "    https://gitlab.com/crafty-controller/crafty-web/-/wikis/Install-Guides#install-crafty-on-linux"
+elif [ "${fail}" -eq 0 ];then
+    if [[ $EUID -ne 0 ]]; then
+        echo "Note: You are not root. Re-executing this script as root using sudo"
+        sudo "$0"
+    else
+        echo "Installing Crafty..."
+        python3 install_crafty.py
+    fi
+else
+    echo "Something really bad broke. (fail value is ${fail}). Please report this error to the developer"
 fi
 
