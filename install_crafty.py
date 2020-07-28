@@ -291,32 +291,29 @@ WantedBy=multi-user.target
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
-    print(f"ID: {id} Version: {version}")
-    # get distro
+    print("We detected your os is: {id} Version: {version}".format(id=id,version=version))
+
     if id == "debian":
         if version == "10":
-            # logger.info("Debian 10 'Buster' Selected")
+            logger.info("Debian 10 'Buster' Detected")
             file = "debian_10.sh"
         else:
-            file = "error debian"
-            # pretty.critical("Unsupported version: {}".format(distro))
-            # sys.exit(1)
+            logger.critical("Unsupported Debian")
+            return False
+
     elif id == "ubuntu":
         if version == "18.04":
-            # logger.info("Ubuntu 18.04 Selected")
+            logger.info("Ubuntu 18.04 Detected")
             file = "ubuntu_18_04.sh"
         elif version == "20.04":
-            # logger.info("Ubuntu 20.04 Selected")
+            logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
         else:
-            file = "error Ubuntu"
-            # pretty.critical("Unsupported version: {}".format(distro))
-            # sys.exit(1)
+            logger.critical("Unsupported Ubuntu")
+            return False
     else:
-        file = "error distro"
-        pretty.critical("Unknown Distro: {}".format(distro))
-        sys.exit(1)
-    #print(f"Ouput: {file}")
+        logger.critical("Unable to determine distro")
+        return False
     return file
 
 if __name__ == "__main__":
