@@ -209,7 +209,7 @@ def make_startup_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-web \n"
-    txt += "python{}.{} crafty.py \n".format(sys.version_info.major, sys.version_info.minor)
+    txt += "python{} crafty.py \n".format(sys.version_info.major)
     with open("run_crafty.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
@@ -244,7 +244,7 @@ def make_service_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-web \n"
-    txt += "python{}.{} crafty.py -d\n".format(sys.version_info.major, sys.version_info.minor)
+    txt += "python{} crafty.py -d\n".format(sys.version_info.major)
     with open("run_crafty_service.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
