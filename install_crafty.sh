@@ -22,6 +22,8 @@ elif [ "${fail}" -eq 0 ];then
         sudo "$0"
     else
         echo "Installing Crafty..."
+        sudo apt install python3-pip -y
+        pip3 install distro
         python3 install_crafty.py
     fi
 else
