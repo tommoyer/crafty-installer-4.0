@@ -298,7 +298,7 @@ def get_distro():
             logger.info("Debian 10 'Buster' Detected")
             file = "debian_10.sh"
         else:
-            logger.critical("Unsupported Debian")
+            logger.critical("Unsupported Debian - We only support Debian 10")
             return False
 
     elif id == "ubuntu":
@@ -309,12 +309,11 @@ def get_distro():
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
         else:
-            logger.critical("Unsupported Ubuntu")
+            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
             return False
-    else:
-        logger.critical("Unable to determine distro")
-        return False
-    return file
+
+    logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
+    return False
 
 if __name__ == "__main__":
 
@@ -343,7 +342,7 @@ if __name__ == "__main__":
 
     distro = get_distro()
     if not distro:
-        pretty.critical("Unable to find distro information, or your distro is not supported.")
+        pretty.critical("Your distro is not supported.")
         logger.critical("Unable to find distro information")
         sys.exit(1)
 
