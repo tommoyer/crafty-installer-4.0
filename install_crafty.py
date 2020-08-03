@@ -293,13 +293,14 @@ def get_distro():
     version = pydistro.version()
     print("We detected your os is: {id} Version: {version}".format(id=id,version=version))
 
+    file = False
+
     if id == "debian":
         if version == "10":
             logger.info("Debian 10 'Buster' Detected")
             file = "debian_10.sh"
         else:
             logger.critical("Unsupported Debian - We only support Debian 10")
-            return False
 
     elif id == "ubuntu":
         if version == "18.04":
@@ -310,10 +311,11 @@ def get_distro():
             file = "ubuntu_20_04.sh"
         else:
             logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
-            return False
 
-    logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
-    return False
+    if not file:
+        logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
+
+    return File
 
 if __name__ == "__main__":
 
