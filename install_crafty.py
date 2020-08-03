@@ -113,7 +113,7 @@ def setup_repo():
 
     # creating venv
     try:
-        subprocess.check_output(''{py} -m venv {dir}'.format(py=sys.executable, dir=venv_dir), shell=True)
+        subprocess.check_output('{py} -m venv {dir}'.format(py=sys.executable, dir=venv_dir), shell=True)
     except Exception as e:
         logger.critical("Unable to create virtual environment!")
         logger.critical("Error: {}".format(e))
