@@ -22,7 +22,7 @@ if len(sys.argv) > 1:
         pretty.info("Debug mode turned on")
 
 
-#our pretty header
+# our pretty header
 def do_header():
     time.sleep(2)
 
@@ -56,19 +56,25 @@ def do_distro_install(distro):
     pretty.warning("This install could take a long time depending on how old your system is.")
     pretty.warning("Please be patient and do not exit the installer otherwise things may break")
 
-
-
     if distro == "ubuntu_18_04.sh":
-        pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
+        pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
 
+    elif distro == "ubuntu_20_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
+
     elif distro == "debian_10.sh":
-        pretty.info("We are updating Apt, python3.7, open-jdk, pip, and virtualenv")
+        pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'debian_10.sh')
 
-    elif distro == "ubuntu_20_04.sh":
-        pretty.info("We are updating Apt, python3.8, open-jdk, pip, and virtualenv")
-        script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
+    elif distro == "centos_8.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'centos_8.sh')
+
+    elif distro == "linuxmint_20.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'mint_20.sh')
 
     else:
         pretty.critical("Unknown Distro: {}".format(distro))
@@ -76,7 +82,7 @@ def do_distro_install(distro):
 
     logger.info("Running {}".format(script))
 
-    #resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
+    # resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
     try:
         p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE)
         while True:
@@ -89,6 +95,7 @@ def do_distro_install(distro):
 
         pretty.critical("Error installing dependencies: {}".format(e))
         logger.critical("Error installing dependencies: {}".format(e))
+
 
 # creates the venv and clones the git repo
 def setup_repo():
@@ -131,10 +138,8 @@ def do_virt_dir_install():
 
     # unattended
     if not defaults['unattended']:
-        branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['master',
-                                                                                           'beta',
-                                                                                           'snaps',
-                                                                                           'dev'])
+        branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['master', 'beta',
+                                                                                               'snaps', 'dev'])
     else:
         branch = defaults['branch']
 
@@ -164,6 +169,7 @@ def do_virt_dir_install():
     # create a quick script / execute pip install
     do_pip_install(branch)
 
+
 # installs pip requirements via shell script
 def do_pip_install(branch):
     src = os.path.join(starting_dir, 'app', 'pip_install_req.sh')
@@ -178,7 +184,8 @@ def do_pip_install(branch):
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
     logger.info('Running Pip: {}'.format(pip_command))
-    pretty.warning("We are now going to install all the python modules for Crafty - This process can take awhile depending on your internet connection")
+    pretty.warning("We are now going to install all the python modules for Crafty - This process can take awhile "
+                   "depending on your internet connection")
 
     time.sleep(3)
 
@@ -291,7 +298,7 @@ WantedBy=multi-user.target
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
-    print("We detected your os is: {id} Version: {version}".format(id=id,version=version))
+    print("We detected your os is: {id} Version: {version}".format(id=id, version=version))
 
     file = False
 
@@ -312,10 +319,18 @@ def get_distro():
         else:
             logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
 
+    elif id == "centos":
+        if version == "20":
+            logger.info("Centos 8 Detected")
+            file = "centos_8.sh"
+        else:
+            logger.critical("Unsupported Centos - We only support Centos 8")
+
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 
     return File
+
 
 if __name__ == "__main__":
 
@@ -432,7 +447,6 @@ if __name__ == "__main__":
                         pretty.critical("Unable to fix permissions issue")
                         sys.exit(1)
 
-
             except Exception as e:
                 logger.critical("Unable to fix permissions issue")
                 pretty.critical("Unable to fix permissions issue")
@@ -475,7 +489,7 @@ if __name__ == "__main__":
                 # unattended
                 if not defaults['unattended']:
                     force_old_removal = helper.get_user_valid_input("Do you want us to fix this permission issue?",
-                                                              ['y', 'n'])
+                                                                    ['y', 'n'])
                 else:
                     force_old_removal = "y"
 
@@ -533,10 +547,6 @@ if __name__ == "__main__":
     time.sleep(1)
     do_header()
 
-    # fix permission issues
-    cmd = "chown crafty:crafty -R {dir} && chmod 2775 -R {dir}".format(dir=install_dir)
-    subprocess.check_output(cmd, shell=True)
-
     pretty.info("Cleaning up temp dir")
     helper.ensure_dir_exists(temp_dir)
 
@@ -553,4 +563,3 @@ if __name__ == "__main__":
         pretty.info("You will need to run Crafty once normally to get the admin password before enabling the service or running the command 'sudo systemctl status crafty.service' after starting the service")
         pretty.info("run this command to enable crafty as a service- 'sudo systemctl enable crafty.service' ")
         pretty.info("run this command to start the crafty service- 'sudo systemctl start crafty.service' ")
-
