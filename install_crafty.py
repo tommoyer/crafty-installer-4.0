@@ -329,7 +329,7 @@ def get_distro():
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 
-    return File
+    return file
 
 
 if __name__ == "__main__":
