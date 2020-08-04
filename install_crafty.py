@@ -326,6 +326,13 @@ def get_distro():
         else:
             logger.critical("Unsupported Centos - We only support Centos 8")
 
+    elif id == "linuxmint":
+        if version == "20":
+            logger.info("Mint 20 Detected")
+            file = "mint_20.sh"
+        else:
+            logger.critical("Unsupported Mint - We only support Mint 20")
+
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 
