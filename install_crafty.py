@@ -320,7 +320,7 @@ def get_distro():
             logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
 
     elif id == "centos":
-        if version == "20":
+        if version == "8":
             logger.info("Centos 8 Detected")
             file = "centos_8.sh"
         else:
