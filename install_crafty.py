@@ -39,16 +39,6 @@ def do_header():
     pretty.header(msg)
 
 
-def get_valid_input(question: str, answers: list ):
-    valid = False
-
-    while not valid:
-        response = input("{} - {}: ".format(question, answers))
-
-        if int(response) in list(answers):
-            return int(response)
-
-
 # here we can define other distro shell scripts for even better support
 def do_distro_install(distro):
     real_dir = os.path.abspath(os.curdir)
@@ -298,7 +288,7 @@ WantedBy=multi-user.target
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
-    print("We detected your os is: {id} Version: {version}".format(id=id, version=version))
+    print("We detected your os is: {id} - Version: {version}".format(id=id, version=version))
 
     file = False
 
