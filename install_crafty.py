@@ -72,7 +72,7 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'centos_8.sh')
 
-    elif distro == "linuxmint_20.sh":
+    elif distro == "mint_20.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'mint_20.sh')
 
