@@ -22,11 +22,15 @@ elif [ "${fail}" -eq 0 ];then
         sudo "$0"
     else
         echo "Installing Crafty..."
-        sudo apt install python3-pip -y
+        # Check to see what package manager to use.
+        if [ -d "/etc/apt" ]; then
+            sudo apt install python3-pip -y
+        else
+            sudo dnf install python3-pip -y
+        fi
         pip3 install distro
         python3 install_crafty.py
     fi
 else
     echo "Something really bad broke. (fail value is ${fail}). Please report this error to the developer"
 fi
-
