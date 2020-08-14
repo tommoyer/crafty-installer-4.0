@@ -58,6 +58,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'debian_10.sh')
 
+    elif distro == "raspbian_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'raspbian_10.sh')
+
     elif distro == "centos_8.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'centos_8.sh')
@@ -298,6 +302,13 @@ def get_distro():
             file = "debian_10.sh"
         else:
             logger.critical("Unsupported Debian - We only support Debian 10")
+
+    elif id == "raspbian":
+        if version == "10":
+            logger.info("Raspbian 10 'Buster' Detected")
+            file = "raspbian_10.sh"
+        else:
+            logger.critical("Unsupported Raspbian - We only support Raspbian 10")
 
     elif id == "ubuntu":
         if version == "18.04":
