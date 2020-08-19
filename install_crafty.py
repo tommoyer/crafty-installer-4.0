@@ -562,7 +562,7 @@ if __name__ == "__main__":
         shutil.rmtree(temp_dir)
 
     pretty.info("Congrats! Crafty is now installed!")
-    pretty.info("We created a user called 'crafty' for you to run crafty as.")
+    pretty.info("We created a user called 'crafty' for you to run crafty as. (DO NOT RUN CRAFTY WITH ROOT OR SUDO) Switch to crafty user with 'sudo crafty -'")
     pretty.info("Your install is located here: {}".format(install_dir))
     pretty.info("You can run crafty by running {}".format(os.path.join(install_dir, "run_crafty.sh")))
     pretty.info("You can update crafty by running {}".format(os.path.join(install_dir, "update_crafty.sh")))
