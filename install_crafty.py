@@ -80,7 +80,7 @@ def do_distro_install(distro):
     try:
         p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE)
         while True:
-            line = p.stdout.readline()
+            line = p.stdout.readline().rstrip()
             if not line:
                 break
             print(line.decode("utf-8"))
@@ -186,7 +186,7 @@ def do_pip_install(branch):
     try:
         p = subprocess.Popen([pip_command], shell=True, stdout=subprocess.PIPE)
         while True:
-            line = p.stdout.readline()
+            line = p.stdout.readline().rstrip()
             if not line:
                 break
             print(line.decode("utf-8"))
