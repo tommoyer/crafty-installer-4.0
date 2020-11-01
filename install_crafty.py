@@ -70,6 +70,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'mint_20.sh')
 
+    elif distro == "arch.sh":
+        pretty.info("We are updating python, open-jdk, and pip")
+        script = os.path.join(real_dir, 'app', 'arch.sh')
+
     else:
         pretty.critical("Unknown Distro: {}".format(distro))
         sys.exit(1)
@@ -334,6 +338,9 @@ def get_distro():
         else:
             logger.critical("Unsupported Mint - We only support Mint 20")
 
+    elif id == "arch" or id == "manjaro":
+        logger.info("{} version {} Dectected".format(id, version))
+        file = "arch.sh"
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 
