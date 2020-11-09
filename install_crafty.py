@@ -326,7 +326,7 @@ def get_distro():
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
         elif version == "20.10":
-            logger.info("Ubuntu 20.04 Detected")
+            logger.info("Ubuntu 20.10 Detected")
             file = "ubuntu_20_10.sh"
         else:
             logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
@@ -339,13 +339,13 @@ def get_distro():
             logger.info("POPOS 19.04 Detected")
             file = "pop.sh"
         elif version == "19.10":
-            logger.info("POPOS 19.04 Detected")
+            logger.info("POPOS 19.10 Detected")
             file = "pop.sh"
         elif version == "20.04":
-            logger.info("POPOS 19.04 Detected")
+            logger.info("POPOS 20.04 Detected")
             file = "pop.sh"
         elif version == "20.10":
-            logger.info("POPOS 19.04 Detected")
+            logger.info("POPOS 20.10 Detected")
             file = "pop.sh"
         else:
             logger.critical("Unsupported PopOS - We only support PopOS 18.04-20.10")
