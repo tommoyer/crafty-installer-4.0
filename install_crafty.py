@@ -54,6 +54,14 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
 
+    elif distro == "ubuntu_20_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'ubuntu_20_10.sh')
+
+    elif distro == "pop.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop.sh')
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'debian_10.sh')
@@ -289,13 +297,13 @@ WantedBy=multi-user.target
 
 
 # get distro
+# get distro
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
     print("We detected your os is: {id} - Version: {version}".format(id=id, version=version))
 
     file = False
-
     if id == "debian":
         if version == "10":
             logger.info("Debian 10 'Buster' Detected")
@@ -317,8 +325,30 @@ def get_distro():
         elif version == "20.04":
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
+        elif version == "20.10":
+            logger.info("Ubuntu 20.04 Detected")
+            file = "ubuntu_20_10.sh"
         else:
             logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
+
+    elif id == "pop":
+        if version == "18.10":
+            logger.info("POPOS 18.10 Detected")
+            file = "pop.sh"
+        elif version == "19.04":
+            logger.info("POPOS 19.04 Detected")
+            file = "pop.sh"
+        elif version == "19.10":
+            logger.info("POPOS 19.04 Detected")
+            file = "pop.sh"
+        elif version == "20.04":
+            logger.info("POPOS 19.04 Detected")
+            file = "pop.sh"
+        elif version == "20.10":
+            logger.info("POPOS 19.04 Detected")
+            file = "pop.sh"
+        else:
+            logger.critical("Unsupported PopOS - We only support PopOS 18.04-20.10")
 
     elif id == "centos":
         if version == "8":
@@ -334,6 +364,9 @@ def get_distro():
         else:
             logger.critical("Unsupported Mint - We only support Mint 20")
 
+    elif id == "arch" or id == "manjaro":
+        logger.info("{} version {} Dectected".format(id, version))
+        file = "arch.sh"
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 

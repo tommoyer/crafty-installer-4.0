@@ -1,5 +1,4 @@
 #!/bin/bash
-echo "Validating that the current user has sudo permissions"
 sudo -v
 sudo_test="$?"
 if [ "${sudo_test}" -eq 127 ];then
