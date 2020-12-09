@@ -54,6 +54,22 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
 
+    elif distro == "ubuntu_20_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'ubuntu_20_10.sh')
+
+    elif distro == "pop_18_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop_18_04.sh')
+
+    elif distro == "pop_20_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop_20_04.sh')
+
+    elif distro == "pop_20_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop_20_10.sh')
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'debian_10.sh')
@@ -314,6 +330,19 @@ def get_distro():
         else:
             logger.critical("Unsupported Raspbian - We only support Raspbian 10")
 
+    elif id == "pop":
+        if version == "18.04":
+            logger.info("POP 18.04 Detected")
+            file = "pop_18_04.sh"
+        elif version == "20.04":
+            logger.info("POP 20.04 Detected")
+            file = "pop_20_04.sh"
+        elif version == "20.10":
+            logger.info("POP 20.10 Detected")
+            file = "pop_20_10.sh"
+        else:
+            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10")
+
     elif id == "ubuntu":
         if version == "18.04":
             logger.info("Ubuntu 18.04 Detected")
@@ -321,8 +350,11 @@ def get_distro():
         elif version == "20.04":
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
+        elif version == "20.10":
+            logger.info("Ubuntu 20.10 Detected")
+            file = "ubuntu_20_10.sh"
         else:
-            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
+            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10")
 
     elif id == "centos":
         if version == "8":
