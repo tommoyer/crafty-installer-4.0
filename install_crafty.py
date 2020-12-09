@@ -341,7 +341,7 @@ def get_distro():
             logger.info("POP 20.10 Detected")
             file = "pop_20_10.sh"
         else:
-            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10")
+            logger.critical("Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10")
 
     elif id == "ubuntu":
         if version == "18.04":
