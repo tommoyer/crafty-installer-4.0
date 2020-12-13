@@ -89,6 +89,9 @@ def do_distro_install(distro):
     elif distro == "arch.sh":
         pretty.info("We are updating python, open-jdk, and pip")
         script = os.path.join(real_dir, 'app', 'arch.sh')
+    elif distro == "fedora.sh":
+        pretty.info("We are updating python3, open-jdk, pip, and libffi")
+        script = os.path.join(real_dir, 'app', 'fedora.sh')
 
     else:
         pretty.critical("Unknown Distro: {}".format(distro))
@@ -373,6 +376,15 @@ def get_distro():
     elif id == "arch" or id == "manjaro":
         logger.info("{} version {} Dectected".format(id, version))
         file = "arch.sh"
+    elif id == "fedora":
+        if version == "32":
+            logger.info("Fedora 32 Detected")
+            file = "fedora.sh"
+        elif version == "33":
+            logger.info("Fedora 33 Detected")
+            file = "fedora.sh"
+        else:
+            logger.critical("Unsupported Fedora version - We only support Fedora 32 / 33")
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 
