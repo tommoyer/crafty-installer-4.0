@@ -106,7 +106,7 @@ def do_distro_install(distro):
             line = p.stdout.readline()
             if not line:
                 break
-            print(line.decode("utf-8"))
+            sys.stdout.write(line.decode("utf-8"))
 
     except Exception as e:
 
@@ -212,7 +212,7 @@ def do_pip_install(branch):
             line = p.stdout.readline()
             if not line:
                 break
-            print(line.decode("utf-8"))
+            sys.stdout.write(line.decode("utf-8"))
 
         # pip_output = subprocess.check_output(pip_command, shell=True)
         # logger.info("Pip output: \n{}".format(pip_output))
@@ -315,7 +315,7 @@ WantedBy=multi-user.target
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
-    print("We detected your os is: {id} - Version: {version}".format(id=id, version=version))
+    sys.stdout.write("We detected your os is: {id} - Version: {version}\n".format(id=id, version=version))
 
     file = False
 
