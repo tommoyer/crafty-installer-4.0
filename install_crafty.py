@@ -54,6 +54,22 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
 
+    elif distro == "ubuntu_20_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'ubuntu_20_10.sh')
+
+    elif distro == "pop_18_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop_18_04.sh')
+
+    elif distro == "pop_20_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop_20_04.sh')
+
+    elif distro == "pop_20_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, 'app', 'pop_20_10.sh')
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, 'app', 'debian_10.sh')
@@ -73,6 +89,9 @@ def do_distro_install(distro):
     elif distro == "arch.sh":
         pretty.info("We are updating python, open-jdk, and pip")
         script = os.path.join(real_dir, 'app', 'arch.sh')
+    elif distro == "fedora.sh":
+        pretty.info("We are updating python3, open-jdk, pip, and libffi")
+        script = os.path.join(real_dir, 'app', 'fedora.sh')
 
     else:
         pretty.critical("Unknown Distro: {}".format(distro))
@@ -87,7 +106,7 @@ def do_distro_install(distro):
             line = p.stdout.readline()
             if not line:
                 break
-            print(line.decode("utf-8"))
+            sys.stdout.write(line.decode("utf-8"))
 
     except Exception as e:
 
@@ -193,7 +212,7 @@ def do_pip_install(branch):
             line = p.stdout.readline()
             if not line:
                 break
-            print(line.decode("utf-8"))
+            sys.stdout.write(line.decode("utf-8"))
 
         # pip_output = subprocess.check_output(pip_command, shell=True)
         # logger.info("Pip output: \n{}".format(pip_output))
@@ -296,7 +315,7 @@ WantedBy=multi-user.target
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
-    print("We detected your os is: {id} - Version: {version}".format(id=id, version=version))
+    sys.stdout.write("We detected your os is: {id} - Version: {version}\n".format(id=id, version=version))
 
     file = False
 
@@ -314,6 +333,19 @@ def get_distro():
         else:
             logger.critical("Unsupported Raspbian - We only support Raspbian 10")
 
+    elif id == "pop":
+        if version == "18.04":
+            logger.info("POP 18.04 Detected")
+            file = "pop_18_04.sh"
+        elif version == "20.04":
+            logger.info("POP 20.04 Detected")
+            file = "pop_20_04.sh"
+        elif version == "20.10":
+            logger.info("POP 20.10 Detected")
+            file = "pop_20_10.sh"
+        else:
+            logger.critical("Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10")
+
     elif id == "ubuntu":
         if version == "18.04":
             logger.info("Ubuntu 18.04 Detected")
@@ -321,8 +353,11 @@ def get_distro():
         elif version == "20.04":
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
+        elif version == "20.10":
+            logger.info("Ubuntu 20.10 Detected")
+            file = "ubuntu_20_10.sh"
         else:
-            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04")
+            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10")
 
     elif id == "centos":
         if version == "8":
@@ -341,6 +376,15 @@ def get_distro():
     elif id == "arch" or id == "manjaro":
         logger.info("{} version {} Dectected".format(id, version))
         file = "arch.sh"
+    elif id == "fedora":
+        if version == "32":
+            logger.info("Fedora 32 Detected")
+            file = "fedora.sh"
+        elif version == "33":
+            logger.info("Fedora 33 Detected")
+            file = "fedora.sh"
+        else:
+            logger.critical("Unsupported Fedora version - We only support Fedora 32 / 33")
     if not file:
         logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
 
