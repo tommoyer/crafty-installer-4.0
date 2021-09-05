@@ -30,9 +30,9 @@ def do_header():
         helper.clear_screen()
 
     msg = "-" * 25
-    msg += "# \t \t Crafty Controller Linux Installer \t \t #"
+    msg += "# \t \t Crafty Commander Linux Installer \t \t #"
     msg += "-" * 25
-    msg += "\n \t\t\t This program will install Crafty Controller on your Linux Machine"
+    msg += "\n \t\t\t This program will install Crafty Commander on your Linux Machine"
     msg += "\n \t\t\t This program isn't perfect, but it will do it's best to get you up an running"
 
     msg += "\n"
@@ -138,7 +138,7 @@ def setup_repo():
 
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
-    subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-web.git', shell=True)
+    subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
 
 
 # this switches to the branch chosen and does the pip install and such
@@ -148,9 +148,7 @@ def do_virt_dir_install():
     # choose your destiny
     pretty.info("Choose your destiny:")
     pretty.info("Crafty comes in different branches:")
-    pretty.info("Master - Most Stable, should be bug free")
-    pretty.info("Beta - Pretty Stable, very few bugs known")
-    pretty.info("Snaps - Unstable, but full of exciting things!")
+    pretty.info("Alpha - Kinda Stable, a few bugs present")
     pretty.info("Dev - Highly Unstable, full of bugs and new features")
 
     # unattended
@@ -161,7 +159,7 @@ def do_virt_dir_install():
         branch = defaults['branch']
 
     # changing to git repo dir
-    os.chdir(os.path.join(install_dir, "crafty-web"))
+    os.chdir(os.path.join(install_dir, "crafty-commander"))
     pretty.info("Jumping into repo directory: {}".format(os.path.abspath(os.curdir)))
     logger.info("Changed directory to: {}".format(os.path.abspath(os.curdir)))
 
@@ -171,14 +169,8 @@ def do_virt_dir_install():
     git_output = ""
 
     # branch selection
-    if branch == 'master':
-        pretty.info("Slow and Stable it is")
-
-    elif branch == "beta":
-        pretty.info("The beta branch is a great choice")
-
-    elif branch == 'snaps':
-        pretty.info("Snaps is where the cool kids hangout")
+    elif branch == 'alpha':
+        pretty.info("Thanks for giving the Alpha a try!")
 
     elif branch == 'dev':
         pretty.info("Way to saddle up cowboy!")
@@ -232,8 +224,8 @@ def make_startup_script():
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
-    txt += "cd crafty-web \n"
-    txt += "python{} crafty.py \n".format(sys.version_info.major)
+    txt += "cd crafty-commander \n"
+    txt += "python{} main.py \n".format(sys.version_info.major)
     with open("run_crafty.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
@@ -249,7 +241,7 @@ def make_update_script():
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
-    txt += "cd crafty-web \n"
+    txt += "cd crafty-commander \n"
     txt += "git pull \n"
     txt += "pip3 install -r requirements.txt \n"
     with open("update_crafty.sh", 'w') as fh:
@@ -267,8 +259,8 @@ def make_service_script():
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
-    txt += "cd crafty-web \n"
-    txt += "python{} crafty.py -d\n".format(sys.version_info.major)
+    txt += "cd crafty-commander \n"
+    txt += "python{} main.py -d\n".format(sys.version_info.major)
     with open("run_crafty_service.sh", 'w') as fh:
         fh.write(txt)
         fh.close()
@@ -281,7 +273,7 @@ def make_service_file():
     logger.info("Changing to {}".format(os.path.abspath(os.curdir)))
     txt = """
 [Unit]
-Description=Crafty Controller
+Description=Crafty Commander
 After=network.target
 
 [Service]
