@@ -25,7 +25,9 @@ elif [ "${fail}" -eq 0 ];then
         # Check to see what package manager to use.
         if [ -d "/etc/apt" ]; then
             sudo apt install python3-pip -y
-        else
+        elif [ -d "/etc/pacman.d" ]; then
+			sudo pacman -S extra/python-pip --noconfirm  
+		else
             sudo dnf install python3-pip -y
         fi
         pip3 install distro
