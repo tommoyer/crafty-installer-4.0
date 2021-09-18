@@ -153,8 +153,8 @@ def do_virt_dir_install():
 
     # unattended
     if not defaults['unattended']:
-        branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['master', 'beta',
-                                                                                               'snaps', 'dev'])
+        branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['alpha', 'dev'])
+
     else:
         branch = defaults['branch']
 
