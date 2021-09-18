@@ -169,7 +169,7 @@ def do_virt_dir_install():
     git_output = ""
 
     # branch selection
-    elif branch == 'alpha':
+    if branch == 'alpha':
         pretty.info("Thanks for giving the Alpha a try!")
 
     elif branch == 'dev':
