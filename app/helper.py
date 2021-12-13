@@ -1,6 +1,7 @@
 import os
 import time
 import subprocess
+import shutil
 import logging
 
 logger = logging.getLogger(__name__)
@@ -65,6 +66,11 @@ class helper_obj:
             return True
         else:
             return False
+
+    def cleanup_bad_install(self, install_dir):
+        shutil.rmtree(install_dir)
+        if self.check_file_exists('/etc/systemd/system/crafty.service'):
+            os.remove('/etc/systemd/system/crafty.service');
 
 
 

@@ -134,6 +134,7 @@ def setup_repo():
     except Exception as e:
         logger.critical("Unable to create virtual environment!")
         logger.critical("Error: {}".format(e))
+        helper.cleanup_bad_install(install_dir)
         sys.exit(1)
 
     # Ask if they have ssh
@@ -146,29 +147,53 @@ def setup_repo():
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
     if clone_method == "ssh":
-        invoking_user = os.getenv('SUDO_USER', 'root')
-        user_ssh_dir = '/home/{}/.ssh/'.format(invoking_user)
-        if os.path.exists(user_ssh_dir + 'id_ed25519'):
-            ssh_key_loc = confirm_key_loc(user_ssh_dir + 'id_ed25519')
-        elif os.path.exists(user_ssh_dir + 'id_rsa'):
-            ssh_key_loc = confirm_key_loc(user_ssh_dir + 'id_rsa')
-        else:
-            ssh_key_loc = confirm_key_loc(None)
-        subprocess.check_output('git clone git@gitlab.com:crafty-controller/crafty-commander.git  --config core.sshCommand="ssh -i {}"'.format(ssh_key_loc), shell=True)
+        clone_repo_ssh()
     else:
-        subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
+        clone_repo_http()
 
-def confirm_key_loc(key_location):
+def confirm_ssh_key_location(key_location):
     if key_location == None:
        key_location = helper.get_user_open_input("Unable to detect ssh key - Please input the full path to your ssh key")
-    
+
+    if not helper.check_file_exists(key_location):
+        pretty.warning("The specified key does not exist!")
+        return confirm_ssh_key_location(None)
+   
     key_confirm = helper.get_user_valid_input("SSH key selected from {}. Would you like to use this key?".format(key_location), ['y', 'n'])
+
     if key_confirm == 'y':
         return key_location
     else:
-        key_location = helper.get_user_open_input("Please specify the full path of the ssh key you wish to use:")
-        return confirm_key_loc(key_location)
+        key_location = helper.get_user_open_input("Please specify the full path of the ssh key you wish to use")
+        return confirm_ssh_key_location(key_location)
 
+def clone_repo_ssh():
+    invoking_user = os.getenv('SUDO_USER', 'root')
+    user_ssh_dir = '/home/{}/.ssh/'.format(invoking_user)
+    if helper.check_file_exists(user_ssh_dir + 'id_ed25519'):
+        ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + 'id_ed25519')
+    elif helper.check_file_exists(user_ssh_dir + 'id_rsa'):
+        ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + 'id_rsa')
+    else:
+        ssh_key_loc = confirm_ssh_key_location(None)
+    try:
+        subprocess.check_output('git clone git@gitlab.com:crafty-controller/crafty-commander.git  --config core.sshCommand="ssh -i {}"'.format(ssh_key_loc), shell=True)
+    except Exception as e:
+        logger.critical("Error: {}".format(e))
+        logger.critical("Git clone failed! Did you specify the correct key?")
+        pretty.critical("Failed to clone. Falling back to HTTPS.")
+        clone_repo_https()
+
+def clone_repo_https():
+    try:
+        subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
+    except Exception as e:
+        logger.critical("Git clone failed!")
+        logger.critical("Error: {}".format(e))
+        pretty.critical("Unable to clone. Please check the install.log for details!")
+        pretty.warning("Cleaning up partial install and exiting...")
+        helper.cleanup_bad_install(install_dir)
+        sys.exit(1)
 
 # this switches to the branch chosen and does the pip install and such
 def do_virt_dir_install():
@@ -468,6 +493,7 @@ if __name__ == "__main__":
     else:
         if not py_check:
             pretty.critical("This script requires Python 3.6 or higher!")
+            helper.cleanup_bad_install()
             sys.exit(1)
 
     do_header()
