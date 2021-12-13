@@ -146,9 +146,28 @@ def setup_repo():
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
     if clone_method == "ssh":
-        subprocess.check_output('git clone git@gitlab.com:crafty-controller/crafty-commander.git', shell=True)
+        invoking_user = os.getenv('SUDO_USER', 'root')
+        user_ssh_dir = '/home/{}/.ssh/'.format(invoking_user)
+        if os.path.exists(user_ssh_dir + 'id_ed25519'):
+            ssh_key_loc = confirm_key_loc(user_ssh_dir + 'id_ed25519')
+        elif os.path.exists(user_ssh_dir + 'id_rsa'):
+            ssh_key_loc = confirm_key_loc(user_ssh_dir + 'id_rsa')
+        else:
+            ssh_key_loc = confirm_key_loc(None)
+        subprocess.check_output('git clone git@gitlab.com:crafty-controller/crafty-commander.git  --config core.sshCommand="ssh -i {}"'.format(ssh_key_loc), shell=True)
     else:
         subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
+
+def confirm_key_loc(key_location):
+    if key_location == None:
+       key_location = helper.get_user_open_input("Unable to detect ssh key - Please input the full path to your ssh key")
+    
+    key_confirm = helper.get_user_valid_input("SSH key selected from {}. Would you like to use this key?".format(key_location), ['y', 'n'])
+    if key_confirm == 'y':
+        return key_location
+    else:
+        key_location = helper.get_user_open_input("Please specify the full path of the ssh key you wish to use:")
+        return confirm_key_loc(key_location)
 
 
 # this switches to the branch chosen and does the pip install and such
