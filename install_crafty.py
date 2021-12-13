@@ -136,9 +136,20 @@ def setup_repo():
         logger.critical("Error: {}".format(e))
         sys.exit(1)
 
+    # Ask if they have ssh
+    pretty.info("To start, how would you like to authenticate?")
+    if not defaults['unattended']:
+        clone_method = helper.get_user_valid_input("Choose SSH if you have a gitlab ssh key set up, otherwise, choose
+        HTTPS.", ['ssh', 'https'])
+    else:
+        clone_method = defaults['clone_method']
+
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
-    subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
+    if clone_method == "ssh":
+        subprocess.check_output('git clone git@gitlab.com:crafty-controller/crafty-commander.git', shell=True)
+    else:
+        subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
 
 
 # this switches to the branch chosen and does the pip install and such
