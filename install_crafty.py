@@ -139,8 +139,7 @@ def setup_repo():
     # Ask if they have ssh
     pretty.info("To start, how would you like to authenticate?")
     if not defaults['unattended']:
-        clone_method = helper.get_user_valid_input("Choose SSH if you have a gitlab ssh key set up, otherwise, choose
-        HTTPS.", ['ssh', 'https'])
+        clone_method = helper.get_user_valid_input("Choose SSH if you have a gitlab ssh key set up, otherwise, choose HTTPS.", ['ssh', 'https'])
     else:
         clone_method = defaults['clone_method']
 
