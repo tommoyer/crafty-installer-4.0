@@ -149,7 +149,7 @@ def setup_repo():
     if clone_method == "ssh":
         clone_repo_ssh()
     else:
-        clone_repo_http()
+        clone_repo_https()
 
 def confirm_ssh_key_location(key_location):
     if key_location == None:
