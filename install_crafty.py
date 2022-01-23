@@ -416,6 +416,9 @@ def get_distro():
         if version == "20":
             logger.info("Mint 20 Detected")
             file = "mint_20.sh"
+        if version == "20.3":
+            logger.info("Mint 20.3 Detected")
+            file = "mint_20.sh"
         else:
             logger.critical("Unsupported Mint - We only support Mint 20")
 
