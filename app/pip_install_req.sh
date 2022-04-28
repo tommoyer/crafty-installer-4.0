@@ -1,5 +1,5 @@
 #!/bin/bash
-cd $1/crafty-web
+cd $1/crafty-4
 git checkout $2
 
 source ../venv/bin/activate
