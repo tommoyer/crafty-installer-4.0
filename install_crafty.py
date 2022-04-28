@@ -255,7 +255,7 @@ def do_virt_dir_install():
 
     # branch selection
     if branch == "master":
-        pretty.info("Safe and stable! :)")
+        pretty.info("Slow and Stable it is")
 
     elif branch == "dev":
         pretty.info("Way to saddle up cowboy!")
