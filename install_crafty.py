@@ -198,7 +198,7 @@ def clone_repo_ssh():
         ssh_key_loc = confirm_ssh_key_location(None)
     try:
         subprocess.check_output(
-            'git clone git@github.com:arcadia-technology/crafty-4.git  --config core.sshCommand="ssh -i {}"'.format(
+            'git clone git@gitlab.com:crafty-controller/crafty-4.git  --config core.sshCommand="ssh -i {}"'.format(
                 ssh_key_loc
             ),
             shell=True,
@@ -213,7 +213,7 @@ def clone_repo_ssh():
 def clone_repo_https():
     try:
         subprocess.check_output(
-            "git clone https://github.com/arcadia-technology/crafty-4.git", shell=True
+            "git clone https://gitlab.com/crafty-controller/crafty-4.git", shell=True
         )
     except Exception as e:
         logger.critical("Git clone failed!")
