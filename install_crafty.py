@@ -13,12 +13,12 @@ import subprocess
 from app.helper import helper
 from app.pretty import pretty
 
-with open('config.json', 'r') as fh:
+with open("config.json", "r") as fh:
     defaults = json.load(fh)
 
 if len(sys.argv) > 1:
     if sys.argv[1] == "-d":
-        defaults['debug_mode'] = True
+        defaults["debug_mode"] = True
         pretty.info("Debug mode turned on")
 
 
@@ -26,7 +26,7 @@ if len(sys.argv) > 1:
 def do_header():
     time.sleep(2)
 
-    if not defaults['debug_mode']:
+    if not defaults["debug_mode"]:
         helper.clear_screen()
 
     msg = "-" * 25
@@ -43,55 +43,83 @@ def do_header():
 def do_distro_install(distro):
     real_dir = os.path.abspath(os.curdir)
 
-    pretty.warning("This install could take a long time depending on how old your system is.")
-    pretty.warning("Please be patient and do not exit the installer otherwise things may break")
+    pretty.warning(
+        "This install could take a long time depending on how old your system is."
+    )
+    pretty.warning(
+        "Please be patient and do not exit the installer otherwise things may break"
+    )
 
     if distro == "ubuntu_18_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'ubuntu_18_04.sh')
+        script = os.path.join(real_dir, "app", "ubuntu_18_04.sh")
 
     elif distro == "ubuntu_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'ubuntu_20_04.sh')
+        script = os.path.join(real_dir, "app", "ubuntu_20_04.sh")
 
     elif distro == "ubuntu_20_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'ubuntu_20_10.sh')
+        script = os.path.join(real_dir, "app", "ubuntu_20_10.sh")
+
+    elif distro == "ubuntu_21_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_21_04.sh")
+
+    elif distro == "ubuntu_21_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_21_10.sh")
+
+    elif distro == "ubuntu_22_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_22_04.sh")
 
     elif distro == "pop_18_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'pop_18_04.sh')
+        script = os.path.join(real_dir, "app", "pop_18_04.sh")
 
     elif distro == "pop_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'pop_20_04.sh')
+        script = os.path.join(real_dir, "app", "pop_20_04.sh")
 
     elif distro == "pop_20_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'pop_20_10.sh')
+        script = os.path.join(real_dir, "app", "pop_20_10.sh")
+
+    elif distro == "pop_21_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "pop_21_04.sh")
 
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'debian_10.sh')
+        script = os.path.join(real_dir, "app", "debian_10.sh")
+
+    elif distro == "debian_11.sh":
+        pretty.info("We are updating python3, open-jdk, temurin and pip")
+        script = os.path.join(real_dir, "app", "debian_11.sh")
 
     elif distro == "raspbian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'raspbian_10.sh')
+        script = os.path.join(real_dir, "app", "raspbian_10.sh")
 
     elif distro == "centos_8.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'centos_8.sh')
+        script = os.path.join(real_dir, "app", "centos_8.sh")
 
     elif distro == "mint_20.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, 'app', 'mint_20.sh')
+        script = os.path.join(real_dir, "app", "mint_20.sh")
+
+    elif distro == "mint_20_2.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "mint_20_2.sh")
 
     elif distro == "arch.sh":
         pretty.info("We are updating python, open-jdk, and pip")
-        script = os.path.join(real_dir, 'app', 'arch.sh')
+        script = os.path.join(real_dir, "app", "arch.sh")
     elif distro == "fedora.sh":
         pretty.info("We are updating python3, open-jdk, pip, and libffi")
-        script = os.path.join(real_dir, 'app', 'fedora.sh')
+        script = os.path.join(real_dir, "app", "fedora.sh")
 
     else:
         pretty.critical("Unknown Distro: {}".format(distro))
@@ -121,7 +149,7 @@ def setup_repo():
     # create new virtual environment
     pretty.info("Creating New Virtual Environment")
 
-    venv_dir = os.path.join(install_dir, 'venv')
+    venv_dir = os.path.join(install_dir, "venv")
 
     # changing to install dir
     os.chdir(install_dir)
@@ -130,7 +158,9 @@ def setup_repo():
 
     # creating venv
     try:
-        subprocess.check_output('{py} -m venv {dir}'.format(py=sys.executable, dir=venv_dir), shell=True)
+        subprocess.check_output(
+            "{py} -m venv {dir}".format(py=sys.executable, dir=venv_dir), shell=True
+        )
     except Exception as e:
         logger.critical("Unable to create virtual environment!")
         logger.critical("Error: {}".format(e))
@@ -139,10 +169,13 @@ def setup_repo():
 
     # Ask if they have ssh
     pretty.info("To start, how would you like to authenticate?")
-    if not defaults['unattended']:
-        clone_method = helper.get_user_valid_input("Choose SSH if you have a gitlab ssh key set up, otherwise, choose HTTPS.", ['ssh', 'https'])
+    if not defaults["unattended"]:
+        clone_method = helper.get_user_valid_input(
+            "Choose SSH if you have a gitlab ssh key set up, otherwise, choose HTTPS.",
+            ["ssh", "https"],
+        )
     else:
-        clone_method = defaults['clone_method']
+        clone_method = defaults["clone_method"]
 
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
@@ -151,42 +184,61 @@ def setup_repo():
     else:
         clone_repo_https()
 
+
 def confirm_ssh_key_location(key_location):
     if key_location == None:
-       key_location = helper.get_user_open_input("Unable to detect ssh key - Please input the full path to your ssh key")
+        key_location = helper.get_user_open_input(
+            "Unable to detect ssh key - Please input the full path to your ssh key"
+        )
 
     if not helper.check_file_exists(key_location):
         pretty.warning("The specified key does not exist!")
         return confirm_ssh_key_location(None)
-   
-    key_confirm = helper.get_user_valid_input("SSH key selected from {}. Would you like to use this key?".format(key_location), ['y', 'n'])
 
-    if key_confirm == 'y':
+    key_confirm = helper.get_user_valid_input(
+        "SSH key selected from {}. Would you like to use this key?".format(
+            key_location
+        ),
+        ["y", "n"],
+    )
+
+    if key_confirm == "y":
         return key_location
     else:
-        key_location = helper.get_user_open_input("Please specify the full path of the ssh key you wish to use")
+        key_location = helper.get_user_open_input(
+            "Please specify the full path of the ssh key you wish to use"
+        )
         return confirm_ssh_key_location(key_location)
 
+
 def clone_repo_ssh():
-    invoking_user = os.getenv('SUDO_USER', 'root')
-    user_ssh_dir = '/home/{}/.ssh/'.format(invoking_user)
-    if helper.check_file_exists(user_ssh_dir + 'id_ed25519'):
-        ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + 'id_ed25519')
-    elif helper.check_file_exists(user_ssh_dir + 'id_rsa'):
-        ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + 'id_rsa')
+    invoking_user = os.getenv("SUDO_USER", "root")
+    user_ssh_dir = "/home/{}/.ssh/".format(invoking_user)
+    if helper.check_file_exists(user_ssh_dir + "id_ed25519"):
+        ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + "id_ed25519")
+    elif helper.check_file_exists(user_ssh_dir + "id_rsa"):
+        ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + "id_rsa")
     else:
         ssh_key_loc = confirm_ssh_key_location(None)
     try:
-        subprocess.check_output('git clone git@gitlab.com:crafty-controller/crafty-commander.git  --config core.sshCommand="ssh -i {}"'.format(ssh_key_loc), shell=True)
+        subprocess.check_output(
+            'git clone git@gitlab.com:crafty-controller/crafty-4.git  --config core.sshCommand="ssh -i {}"'.format(
+                ssh_key_loc
+            ),
+            shell=True,
+        )
     except Exception as e:
         logger.critical("Error: {}".format(e))
         logger.critical("Git clone failed! Did you specify the correct key?")
         pretty.critical("Failed to clone. Falling back to HTTPS.")
         clone_repo_https()
 
+
 def clone_repo_https():
     try:
-        subprocess.check_output('git clone http://gitlab.com/crafty-controller/crafty-commander.git', shell=True)
+        subprocess.check_output(
+            "git clone https://gitlab.com/crafty-controller/crafty-4.git", shell=True
+        )
     except Exception as e:
         logger.critical("Git clone failed!")
         logger.critical("Error: {}".format(e))
@@ -194,6 +246,7 @@ def clone_repo_https():
         pretty.warning("Cleaning up partial install and exiting...")
         helper.cleanup_bad_install(install_dir)
         sys.exit(1)
+
 
 # this switches to the branch chosen and does the pip install and such
 def do_virt_dir_install():
@@ -206,14 +259,16 @@ def do_virt_dir_install():
     pretty.info("Dev - Highly Unstable, full of bugs and new features")
 
     # unattended
-    if not defaults['unattended']:
-        branch = helper.get_user_valid_input("Which branch of Crafty would you like to run?", ['master', 'dev'])
+    if not defaults["unattended"]:
+        branch = helper.get_user_valid_input(
+            "Which branch of Crafty would you like to run?", ["master", "dev"]
+        )
 
     else:
-        branch = defaults['branch']
+        branch = defaults["branch"]
 
     # changing to git repo dir
-    os.chdir(os.path.join(install_dir, "crafty-commander"))
+    os.chdir(os.path.join(install_dir, "crafty-4"))
     pretty.info("Jumping into repo directory: {}".format(os.path.abspath(os.curdir)))
     logger.info("Changed directory to: {}".format(os.path.abspath(os.curdir)))
 
@@ -223,10 +278,10 @@ def do_virt_dir_install():
     git_output = ""
 
     # branch selection
-    if branch == 'alpha':
-        pretty.info("Thanks for giving the Alpha a try!")
+    if branch == "master":
+        pretty.info("Slow and Stable it is")
 
-    elif branch == 'dev':
+    elif branch == "dev":
         pretty.info("Way to saddle up cowboy!")
 
     # create a quick script / execute pip install
@@ -235,8 +290,8 @@ def do_virt_dir_install():
 
 # installs pip requirements via shell script
 def do_pip_install(branch):
-    src = os.path.join(starting_dir, 'app', 'pip_install_req.sh')
-    dst = os.path.join(install_dir, 'pip_install_req.sh')
+    src = os.path.join(starting_dir, "app", "pip_install_req.sh")
+    dst = os.path.join(install_dir, "pip_install_req.sh")
 
     logger.info("Copying PIP install script")
     shutil.copyfile(src, dst)
@@ -246,9 +301,11 @@ def do_pip_install(branch):
     logger.info("Chmod +x {}".format(dst))
     subprocess.check_call("chmod +x {}".format(dst), shell=True)
 
-    logger.info('Running Pip: {}'.format(pip_command))
-    pretty.warning("We are now going to install all the python modules for Crafty - This process can take awhile "
-                   "depending on your internet connection")
+    logger.info("Running Pip: {}".format(pip_command))
+    pretty.warning(
+        "We are now going to install all the python modules for Crafty - This process can take awhile "
+        "depending on your internet connection"
+    )
 
     time.sleep(3)
 
@@ -266,7 +323,7 @@ def do_pip_install(branch):
     except Exception as e:
         logger.error("Pip failed due to error: {}".format(e))
 
-    if not defaults['debug_mode']:
+    if not defaults["debug_mode"]:
         os.remove(dst)
 
 
@@ -278,9 +335,9 @@ def make_startup_script():
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
-    txt += "cd crafty-commander \n"
+    txt += "cd crafty-4 \n"
     txt += "python{} main.py \n".format(sys.version_info.major)
-    with open("run_crafty.sh", 'w') as fh:
+    with open("run_crafty.sh", "w") as fh:
         fh.write(txt)
         fh.close()
 
@@ -295,10 +352,10 @@ def make_update_script():
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
-    txt += "cd crafty-commander \n"
+    txt += "cd crafty-4 \n"
     txt += "git pull \n"
     txt += "pip3 install -r requirements.txt \n"
-    with open("update_crafty.sh", 'w') as fh:
+    with open("update_crafty.sh", "w") as fh:
         fh.write(txt)
         fh.close()
 
@@ -313,9 +370,9 @@ def make_service_script():
     txt = "#!/bin/bash\n"
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
-    txt += "cd crafty-commander \n"
+    txt += "cd crafty-4 \n"
     txt += "python{} main.py -d\n".format(sys.version_info.major)
-    with open("run_crafty_service.sh", 'w') as fh:
+    with open("run_crafty_service.sh", "w") as fh:
         fh.write(txt)
         fh.close()
 
@@ -327,7 +384,7 @@ def make_service_file():
     logger.info("Changing to {}".format(os.path.abspath(os.curdir)))
     txt = """
 [Unit]
-Description=Crafty Commander
+Description=Crafty 4
 After=network.target
 
 [Service]
@@ -348,20 +405,28 @@ Restart=on-failure
 # For system level services, use `multi-user.target`
 [Install]
 WantedBy=multi-user.target
-""".format(install_dir)
+""".format(
+        install_dir
+    )
 
-    with open("crafty.service", 'w') as fh:
+    with open("crafty.service", "w") as fh:
         fh.write(txt)
         fh.close()
 
-    subprocess.check_output("cp crafty.service /etc/systemd/system/crafty.service", shell=True)
+    subprocess.check_output(
+        "cp crafty.service /etc/systemd/system/crafty.service", shell=True
+    )
 
 
 # get distro
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
-    sys.stdout.write("We detected your os is: {id} - Version: {version}\n".format(id=id, version=version))
+    sys.stdout.write(
+        "We detected your os is: {id} - Version: {version}\n".format(
+            id=id, version=version
+        )
+    )
 
     file = False
 
@@ -369,8 +434,11 @@ def get_distro():
         if version == "10":
             logger.info("Debian 10 'Buster' Detected")
             file = "debian_10.sh"
+        if version == "11":
+            logger.info("Debian 11 'Bullseye' Detected")
+            file = "debian_11.sh"
         else:
-            logger.critical("Unsupported Debian - We only support Debian 10")
+            logger.critical("Unsupported Debian - We only support Debian 10 and 11")
 
     elif id == "raspbian":
         if version == "10":
@@ -389,8 +457,13 @@ def get_distro():
         elif version == "20.10":
             logger.info("POP 20.10 Detected")
             file = "pop_20_10.sh"
+        elif version == "21.04":
+            logger.info("POP 21.04 Detected")
+            file = "pop_21_04.sh"
         else:
-            logger.critical("Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10")
+            logger.critical(
+                "Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10 / 21.04"
+            )
 
     elif id == "ubuntu":
         if version == "18.04":
@@ -402,8 +475,19 @@ def get_distro():
         elif version == "20.10":
             logger.info("Ubuntu 20.10 Detected")
             file = "ubuntu_20_10.sh"
+        elif version == "21.04":
+            logger.info("Ubuntu 21.04 Detected")
+            file = "ubuntu_21_04.sh"
+        elif version == "21.10":
+            logger.info("Ubuntu 21.10 Detected")
+            file = "ubuntu_21_10.sh"
+        elif version == "22.04":
+            logger.info("Ubuntu 22.04 Detected")
+            file = "ubuntu_22_04.sh"
         else:
-            logger.critical("Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10")
+            logger.critical(
+                "Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
+            )
 
     elif id == "centos":
         if version == "8":
@@ -416,8 +500,8 @@ def get_distro():
         if version == "20":
             logger.info("Mint 20 Detected")
             file = "mint_20.sh"
-        if version == "20.3":
-            logger.info("Mint 20.3 Detected")
+        if version == "20.2":
+            logger.info("Mint 20.2 Detected")
             file = "mint_20.sh"
         else:
             logger.critical("Unsupported Mint - We only support Mint 20")
@@ -433,26 +517,32 @@ def get_distro():
             logger.info("Fedora 33 Detected")
             file = "fedora.sh"
         else:
-            logger.critical("Unsupported Fedora version - We only support Fedora 32 / 33")
+            logger.critical(
+                "Unsupported Fedora version - We only support Fedora 32 / 33"
+            )
     if not file:
-        logger.critical("Unable to determine distro: ID:{} - Version:{}".format(id, version))
+        logger.critical(
+            "Unable to determine distro: ID:{} - Version:{}".format(id, version)
+        )
 
     return file
 
 
 if __name__ == "__main__":
 
-    logging.basicConfig(filename='installer.log',
-                        filemode='w',
-                        format='[+] Crafty Installer: %(levelname)s - %(message)s',
-                        level=logging.INFO)
+    logging.basicConfig(
+        filename="installer.log",
+        filemode="w",
+        format="[+] Crafty Installer: %(levelname)s - %(message)s",
+        level=logging.INFO,
+    )
 
     logger = logging.getLogger(__name__)
 
     logger.info("Installer Started")
 
     starting_dir = os.path.abspath(os.path.curdir)
-    temp_dir = os.path.join(starting_dir, 'temp')
+    temp_dir = os.path.join(starting_dir, "temp")
 
     do_header()
 
@@ -463,7 +553,11 @@ if __name__ == "__main__":
         sys.exit(1)
 
     pretty.info("Linux Check Success")
-    pretty.info("Python Version Check - {}.{}".format(sys.version_info.major, sys.version_info.minor))
+    pretty.info(
+        "Python Version Check - {}.{}".format(
+            sys.version_info.major, sys.version_info.minor
+        )
+    )
 
     distro = get_distro()
     if not distro:
@@ -474,50 +568,73 @@ if __name__ == "__main__":
     # default py_check
     py_check = False
 
-    # are we at least on 3.6?
-    if not (sys.version_info.major == 3 and sys.version_info.minor >= 6):
-        pretty.critical("This script requires Python 3.6 or higher!")
-        pretty.critical("You are using Python {}.{}.".format(sys.version_info.major, sys.version_info.minor))
-        logger.critical("Python Version < 3.6: {}.{} was found".format(sys.version_info.major, sys.version_info.minor))
+    # are we at least on 3.8?
+    if not (sys.version_info.major == 3 and sys.version_info.minor >= 8):
+        pretty.critical("This script requires Python 3.8 or higher!")
+        pretty.critical(
+            "You are using Python {}.{}.".format(
+                sys.version_info.major, sys.version_info.minor
+            )
+        )
+        logger.critical(
+            "Python Version < 3.8: {}.{} was found".format(
+                sys.version_info.major, sys.version_info.minor
+            )
+        )
         time.sleep(1)
-        pretty.warning("Your python version didn't check out - do you want us to fix this for you?")
+        pretty.warning(
+            "Your python version didn't check out - do you want us to fix this for you?"
+        )
     else:
         py_check = True
 
     # unattended
-    if not defaults['unattended']:
-        install_requirements = helper.get_user_valid_input("Install {} requirements?".format(distro), ['y', 'n'])
+    if not defaults["unattended"]:
+        install_requirements = helper.get_user_valid_input(
+            "Install {} requirements?".format(distro), ["y", "n"]
+        )
     else:
-        install_requirements = 'y'
+        install_requirements = "y"
 
     if install_requirements == "y":
-        pretty.info("Installing required packages for {} - Please enter sudo password when prompted".format(distro))
+        pretty.info(
+            "Installing required packages for {} - Please enter sudo password when prompted".format(
+                distro
+            )
+        )
         do_distro_install(distro)
     else:
         if not py_check:
-            pretty.critical("This script requires Python 3.6 or higher!")
+            pretty.critical("This script requires Python 3.8 or higher!")
             helper.cleanup_bad_install()
             sys.exit(1)
 
     do_header()
 
     # do we want to install to default dir?
-    pretty.info("Crafty's Default install directory is set to: {}".format(defaults['install_dir']))
+    pretty.info(
+        "Crafty's Default install directory is set to: {}".format(
+            defaults["install_dir"]
+        )
+    )
 
     # unattended
-    if not defaults['unattended']:
+    if not defaults["unattended"]:
         install_dir = helper.get_user_valid_input(
-            "Install Crafty to this directory? {}".format(defaults['install_dir']),
-            ["y", "n"])
+            "Install Crafty to this directory? {}".format(defaults["install_dir"]),
+            ["y", "n"],
+        )
     else:
-        install_dir = 'y'
+        install_dir = "y"
 
     do_header()
 
-    if install_dir == 'n':
-        install_dir = helper.get_user_open_input("Where would you like Crafty to install to?")
+    if install_dir == "n":
+        install_dir = helper.get_user_open_input(
+            "Where would you like Crafty to install to?"
+        )
     else:
-        install_dir = defaults['install_dir']
+        install_dir = defaults["install_dir"]
 
     pretty.info("Installing Crafty to {}".format(install_dir))
     logger.info("Installing Crafty to {}".format(install_dir))
@@ -528,8 +645,10 @@ if __name__ == "__main__":
         logger.warning("Unable to write to {} - Permission denied".format(install_dir))
 
         # unattended
-        if not defaults['unattended']:
-            own_install_dir = helper.get_user_valid_input("Do you want us to fix this permission issue?", ['y', 'n'])
+        if not defaults["unattended"]:
+            own_install_dir = helper.get_user_valid_input(
+                "Do you want us to fix this permission issue?", ["y", "n"]
+            )
         else:
             own_install_dir = "y"
 
@@ -539,20 +658,24 @@ if __name__ == "__main__":
                 helper.ensure_dir_exists(temp_dir)
 
                 # let's create a quick sh script to create the dir as root, and then chown the dir to the current user
-                fix_perms_sh = os.path.join(temp_dir, 'fix_perms.sh')
+                fix_perms_sh = os.path.join(temp_dir, "fix_perms.sh")
 
-                with open(fix_perms_sh, 'w') as fh:
+                with open(fix_perms_sh, "w") as fh:
                     txt = "#!/bin/bash\n"
                     txt += "sudo mkdir -p {}\n".format(install_dir)
                     txt += "sudo chown crafty:crafty {}\n".format(install_dir)
                     fh.write(txt)
                     fh.close()
 
-                    subprocess.check_output("chmod +x {}".format(fix_perms_sh), shell=True)
+                    subprocess.check_output(
+                        "chmod +x {}".format(fix_perms_sh), shell=True
+                    )
                     subprocess.check_output(fix_perms_sh, shell=True)
 
                     if not helper.check_writeable(install_dir):
-                        logger.critical("Unable to fix permissions issue after shell script")
+                        logger.critical(
+                            "Unable to fix permissions issue after shell script"
+                        )
                         pretty.critical("Unable to fix permissions issue")
                         sys.exit(1)
 
@@ -562,7 +685,11 @@ if __name__ == "__main__":
 
             # after changing the ownership, let's see if we can write to it now.
             if not helper.check_writeable(install_dir):
-                logger.critical("{} is still unwritable - Unable to fix permissions issue".format(install_dir))
+                logger.critical(
+                    "{} is still unwritable - Unable to fix permissions issue".format(
+                        install_dir
+                    )
+                )
                 sys.exit(1)
 
     # is this a fresh install?
@@ -576,11 +703,15 @@ if __name__ == "__main__":
 
     if len(files) > 0:
         logger.warning("Old Crafty install detected: {}".format(install_dir))
-        pretty.info("Old Crafty Install Detected, do you wish to delete this old install?")
+        pretty.info(
+            "Old Crafty Install Detected, do you wish to delete this old install?"
+        )
 
         # unattended
-        if not defaults['unattended']:
-            del_old = helper.get_user_valid_input("Delete files in {}? ".format(install_dir), ['y', 'n'])
+        if not defaults["unattended"]:
+            del_old = helper.get_user_valid_input(
+                "Delete files in {}? ".format(install_dir), ["y", "n"]
+            )
         else:
             del_old = "y"
 
@@ -592,13 +723,18 @@ if __name__ == "__main__":
                 shutil.rmtree(install_dir)
 
             except Exception as e:
-                pretty.warning("Unable to write to {} - Permission denied".format(install_dir))
-                logger.warning("Unable to write to {} - Permission denied".format(install_dir))
+                pretty.warning(
+                    "Unable to write to {} - Permission denied".format(install_dir)
+                )
+                logger.warning(
+                    "Unable to write to {} - Permission denied".format(install_dir)
+                )
 
                 # unattended
-                if not defaults['unattended']:
-                    force_old_removal = helper.get_user_valid_input("Do you want us to fix this permission issue?",
-                                                                    ['y', 'n'])
+                if not defaults["unattended"]:
+                    force_old_removal = helper.get_user_valid_input(
+                        "Do you want us to fix this permission issue?", ["y", "n"]
+                    )
                 else:
                     force_old_removal = "y"
 
@@ -606,14 +742,18 @@ if __name__ == "__main__":
 
                     helper.ensure_dir_exists(temp_dir)
 
-                    remove_old_dir_script = os.path.join(temp_dir, 'force_old_removal.sh')
+                    remove_old_dir_script = os.path.join(
+                        temp_dir, "force_old_removal.sh"
+                    )
 
-                    with open(remove_old_dir_script, 'w') as fh:
+                    with open(remove_old_dir_script, "w") as fh:
                         txt = "#!/bin/bash\n"
                         txt += "sudo rm -rf {}\n".format(install_dir)
                         fh.write(txt)
                         fh.close()
-                        subprocess.check_output("chmod +x {}".format(remove_old_dir_script), shell=True)
+                        subprocess.check_output(
+                            "chmod +x {}".format(remove_old_dir_script), shell=True
+                        )
                         subprocess.check_output(remove_old_dir_script, shell=True)
 
                     try:
@@ -630,7 +770,9 @@ if __name__ == "__main__":
 
         else:
             logger.info("User is keeping old files")
-            pretty.warning("Installing on top of an old install isn't supported - God Speed")
+            pretty.warning(
+                "Installing on top of an old install isn't supported - God Speed"
+            )
 
     setup_repo()
 
@@ -644,13 +786,17 @@ if __name__ == "__main__":
     make_startup_script()
     make_update_script()
 
-    service_answer = helper.get_user_valid_input("Would you like to make a service file for Crafty?", ['y', 'n'])
+    service_answer = helper.get_user_valid_input(
+        "Would you like to make a service file for Crafty?", ["y", "n"]
+    )
     if service_answer == "y":
         make_service_script()
         make_service_file()
 
     # fixing permission issues
-    cmd = "sudo chown crafty:crafty -R {dir} && sudo chmod 2775 -R {dir}".format(dir=install_dir)
+    cmd = "sudo chown crafty:crafty -R {dir} && sudo chmod 2775 -R {dir}".format(
+        dir=install_dir
+    )
     subprocess.check_output(cmd, shell=True)
 
     time.sleep(1)
@@ -659,16 +805,34 @@ if __name__ == "__main__":
     pretty.info("Cleaning up temp dir")
     helper.ensure_dir_exists(temp_dir)
 
-    if not defaults['debug_mode']:
+    if not defaults["debug_mode"]:
         shutil.rmtree(temp_dir)
 
     pretty.info("Congrats! Crafty is now installed!")
-    pretty.info("We created a user called 'crafty' for you to run crafty as. (DO NOT RUN CRAFTY WITH ROOT OR SUDO) Switch to crafty user with 'sudo su crafty -'")
+    pretty.info(
+        "We created a user called 'crafty' for you to run crafty as. (DO NOT RUN CRAFTY WITH ROOT OR SUDO) Switch to crafty user with 'sudo su crafty -'"
+    )
     pretty.info("Your install is located here: {}".format(install_dir))
-    pretty.info("You can run crafty by running {}".format(os.path.join(install_dir, "run_crafty.sh")))
-    pretty.info("You can update crafty by running {}".format(os.path.join(install_dir, "update_crafty.sh")))
+    pretty.info(
+        "You can run crafty by running {}".format(
+            os.path.join(install_dir, "run_crafty.sh")
+        )
+    )
+    pretty.info(
+        "You can update crafty by running {}".format(
+            os.path.join(install_dir, "update_crafty.sh")
+        )
+    )
     if service_answer:
-        pretty.info("A service unit file has been saved in /etc/systemd/system/crafty.service")
-        pretty.info("You will need to run Crafty once normally to get the admin password before enabling the service or running the command 'sudo systemctl status crafty.service' after starting the service")
-        pretty.info("run this command to enable crafty as a service- 'sudo systemctl enable crafty.service' ")
-        pretty.info("run this command to start the crafty service- 'sudo systemctl start crafty.service' ")
+        pretty.info(
+            "A service unit file has been saved in /etc/systemd/system/crafty.service"
+        )
+        pretty.info(
+            "You will need to run Crafty once normally to get the admin password before enabling the service or running the command 'sudo systemctl status crafty.service' after starting the service"
+        )
+        pretty.info(
+            "run this command to enable crafty as a service- 'sudo systemctl enable crafty.service' "
+        )
+        pretty.info(
+            "run this command to start the crafty service- 'sudo systemctl start crafty.service' "
+        )
