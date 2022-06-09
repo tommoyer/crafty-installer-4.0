@@ -62,6 +62,18 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_20_10.sh")
 
+    elif distro == "ubuntu_21_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_21_04.sh")
+
+    elif distro == "ubuntu_21_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_21_10.sh")
+
+    elif distro == "ubuntu_22_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_22_04.sh")
+
     elif distro == "pop_18_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_18_04.sh")
@@ -74,9 +86,17 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_20_10.sh")
 
+    elif distro == "pop_21_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "pop_21_04.sh")
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "debian_10.sh")
+
+    elif distro == "debian_11.sh":
+        pretty.info("We are updating python3, open-jdk, temurin and pip")
+        script = os.path.join(real_dir, "app", "debian_11.sh")
 
     elif distro == "raspbian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
@@ -89,6 +109,10 @@ def do_distro_install(distro):
     elif distro == "mint_20.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "mint_20.sh")
+
+    elif distro == "mint_20_2.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "mint_20_2.sh")
 
     elif distro == "arch.sh":
         pretty.info("We are updating python, open-jdk, and pip")
@@ -410,8 +434,11 @@ def get_distro():
         if version == "10":
             logger.info("Debian 10 'Buster' Detected")
             file = "debian_10.sh"
+        if version == "11":
+            logger.info("Debian 11 'Bullseye' Detected")
+            file = "debian_11.sh"
         else:
-            logger.critical("Unsupported Debian - We only support Debian 10")
+            logger.critical("Unsupported Debian - We only support Debian 10 and 11")
 
     elif id == "raspbian":
         if version == "10":
@@ -430,9 +457,12 @@ def get_distro():
         elif version == "20.10":
             logger.info("POP 20.10 Detected")
             file = "pop_20_10.sh"
+        elif version == "21.04":
+            logger.info("POP 21.04 Detected")
+            file = "pop_21_04.sh"
         else:
             logger.critical(
-                "Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10"
+                "Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10 / 21.04"
             )
 
     elif id == "ubuntu":
@@ -445,9 +475,18 @@ def get_distro():
         elif version == "20.10":
             logger.info("Ubuntu 20.10 Detected")
             file = "ubuntu_20_10.sh"
+        elif version == "21.04":
+            logger.info("Ubuntu 21.04 Detected")
+            file = "ubuntu_21_04.sh"
+        elif version == "21.10":
+            logger.info("Ubuntu 21.10 Detected")
+            file = "ubuntu_21_10.sh"
+        elif version == "22.04":
+            logger.info("Ubuntu 22.04 Detected")
+            file = "ubuntu_22_04.sh"
         else:
             logger.critical(
-                "Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10"
+                "Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
             )
 
     elif id == "centos":
@@ -461,8 +500,8 @@ def get_distro():
         if version == "20":
             logger.info("Mint 20 Detected")
             file = "mint_20.sh"
-        if version == "20.3":
-            logger.info("Mint 20.3 Detected")
+        if version == "20.2":
+            logger.info("Mint 20.2 Detected")
             file = "mint_20.sh"
         else:
             logger.critical("Unsupported Mint - We only support Mint 20")
