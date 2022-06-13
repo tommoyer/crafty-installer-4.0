@@ -32,7 +32,7 @@ def do_header():
     msg = "-" * 25
     msg += "# \t \t Crafty Controller 4.0 Linux Installer \t \t #"
     msg += "-" * 25
-    msg += "\n \t\t\t This program will install Crafty Commander on your Linux Machine"
+    msg += "\n \t\t\t This program will install Crafty Controller 4.0 on your Linux Machine"
     msg += "\n \t\t\t This program isn't perfect, but it will do it's best to get you up an running"
 
     msg += "\n"
