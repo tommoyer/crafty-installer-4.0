@@ -336,7 +336,7 @@ def make_startup_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-4 \n"
-    txt += "python{} main.py \n".format(sys.version_info.major)
+    txt += "exec python{} main.py \n".format(sys.version_info.major)
     with open("run_crafty.sh", "w") as fh:
         fh.write(txt)
         fh.close()
