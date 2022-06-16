@@ -336,7 +336,7 @@ def make_startup_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-4 \n"
-    txt += "python{} main.py \n".format(sys.version_info.major)
+    txt += "exec python{} main.py \n".format(sys.version_info.major)
     with open("run_crafty.sh", "w") as fh:
         fh.write(txt)
         fh.close()
@@ -703,76 +703,13 @@ if __name__ == "__main__":
 
     if len(files) > 0:
         logger.warning("Old Crafty install detected: {}".format(install_dir))
-        pretty.info(
-            "Old Crafty Install Detected, do you wish to delete this old install?"
+        pretty.warning(
+            "Old Crafty Install Detected. Please move all files out of the install"
+            + " directory and run this script again."
         )
 
-        # unattended
-        if not defaults["unattended"]:
-            del_old = helper.get_user_valid_input(
-                "Delete files in {}? ".format(install_dir), ["y", "n"]
-            )
-        else:
-            del_old = "y"
-
-        if del_old == "y":
-            logger.info("User said to delete old files")
-            pretty.info("Deleting old copies of Crafty")
-
-            try:
-                shutil.rmtree(install_dir)
-
-            except Exception as e:
-                pretty.warning(
-                    "Unable to write to {} - Permission denied".format(install_dir)
-                )
-                logger.warning(
-                    "Unable to write to {} - Permission denied".format(install_dir)
-                )
-
-                # unattended
-                if not defaults["unattended"]:
-                    force_old_removal = helper.get_user_valid_input(
-                        "Do you want us to fix this permission issue?", ["y", "n"]
-                    )
-                else:
-                    force_old_removal = "y"
-
-                if force_old_removal == "y":
-
-                    helper.ensure_dir_exists(temp_dir)
-
-                    remove_old_dir_script = os.path.join(
-                        temp_dir, "force_old_removal.sh"
-                    )
-
-                    with open(remove_old_dir_script, "w") as fh:
-                        txt = "#!/bin/bash\n"
-                        txt += "sudo rm -rf {}\n".format(install_dir)
-                        fh.write(txt)
-                        fh.close()
-                        subprocess.check_output(
-                            "chmod +x {}".format(remove_old_dir_script), shell=True
-                        )
-                        subprocess.check_output(remove_old_dir_script, shell=True)
-
-                    try:
-                        files = os.listdir(install_dir)
-                    except:
-                        pass
-
-                    if len(files) > 0:
-                        logger.critical("Unable to delete the old install directory")
-                        pretty.critical("Unable to delete the old install directory")
-                        sys.exit(1)
-
-            helper.ensure_dir_exists(install_dir)
-
-        else:
-            logger.info("User is keeping old files")
-            pretty.warning(
-                "Installing on top of an old install isn't supported - God Speed"
-            )
+        time.sleep(10)
+        sys.exit()
 
     setup_repo()
 
