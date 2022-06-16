@@ -703,7 +703,7 @@ if __name__ == "__main__":
 
     if len(files) > 0:
         logger.warning("Old Crafty install detected: {}".format(install_dir))
-        pretty.info(
+        pretty.warning(
             "Old Crafty Install Detected. Please move all files out of the install directory and run this script again."
         )
 
