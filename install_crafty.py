@@ -102,10 +102,6 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "raspbian_10.sh")
 
-    elif distro == "centos_8.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "centos_8.sh")
-
     elif distro == "mint_20.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "mint_20.sh")
@@ -490,11 +486,10 @@ def get_distro():
             )
 
     elif id == "centos":
-        if version == "8":
-            logger.info("Centos 8 Detected")
-            file = "centos_8.sh"
-        else:
-            logger.critical("Unsupported Centos - We only support Centos 8")
+        logger.critical(
+            "Unsupported Distro - CentOS is EOL as of 2022/12/31. As such we no longer support this distro. Please upgrade to its successor, CentOS Stream 8. "
+            "Support for CentOS stream 8 will be coming soon..."
+        )
 
     elif id == "linuxmint":
         if version == "20":
