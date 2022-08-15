@@ -126,7 +126,6 @@ def do_distro_install(distro):
     # resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
     try:
         # Going to ensure our script has full permissions.
-        os.chmod(os.path.join(real_dir, "app", "pip_install_req.sh"), 0o0777)
         os.chmod(script, 0o0777)
         p = subprocess.Popen(script, shell=True, stdout=subprocess.PIPE)
         while True:
@@ -289,6 +288,7 @@ def do_virt_dir_install():
 
 # installs pip requirements via shell script
 def do_pip_install(branch):
+    os.chmod(os.path.join(starting_dir, "app", "pip_install_req.sh"), 0o0777)
     src = os.path.join(starting_dir, "app", "pip_install_req.sh")
     dst = os.path.join(install_dir, "pip_install_req.sh")
 
