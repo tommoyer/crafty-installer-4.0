@@ -110,6 +110,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "mint_20_2.sh")
 
+    elif distro == "mint_20_3.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "mint_20_3.sh")
+
     elif distro == "arch.sh":
         pretty.info("We are updating python, open-jdk, and pip")
         script = os.path.join(real_dir, "app", "arch.sh")
@@ -498,9 +502,12 @@ def get_distro():
         if version == "20":
             logger.info("Mint 20 Detected")
             file = "mint_20.sh"
-        if version == "20.2":
+        elif version == "20.2":
             logger.info("Mint 20.2 Detected")
-            file = "mint_20.sh"
+            file = "mint_20_2sh"
+        elif version == "20.3":
+            logger.info("Mint 20.3 Detected")
+            file = "mint_20_3.sh"
         else:
             logger.critical("Unsupported Mint - We only support Mint 20")
 
