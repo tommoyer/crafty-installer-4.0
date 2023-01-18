@@ -85,6 +85,14 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_21_04.sh")
 
+    elif distro == "pop_21_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "pop_21_10.sh")
+
+    elif distro == "pop_22_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "pop_22_04.sh")
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "debian_10.sh")
@@ -455,9 +463,18 @@ def get_distro():
         elif version == "21.04":
             logger.info("POP 21.04 Detected")
             file = "pop_21_04.sh"
+
+        elif version == "21.10":
+            logger.info("POP 21.10 Detected")
+            file = "pop_21_10.sh"
+
+        elif version == "22.04":
+            logger.info("POP 21.04 Detected")
+            file = "pop_22_04.sh"
+
         else:
             logger.critical(
-                "Unsupported POP - We only support PopOS 20.04 / 20.10 / 21.04"
+                "Unsupported POP - We only support PopOS 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
             )
 
     elif id == "ubuntu":
@@ -479,10 +496,10 @@ def get_distro():
 
         elif version == "22.10":
             logger.info("Ubuntu 22.04 Detected")
-            file = "ubuntu_22_04.sh"
+            file = "ubuntu_22_10.sh"
         else:
             logger.critical(
-                "Unsupported Ubuntu - We only support Ubuntu 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
+                "Unsupported Ubuntu - We only support Ubuntu 20.04 / 20.10 / 21.04 / 21.10 / 22.04 / 22.10"
             )
 
     elif id == "centos":
