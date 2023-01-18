@@ -49,12 +49,7 @@ def do_distro_install(distro):
     pretty.warning(
         "Please be patient and do not exit the installer otherwise things may break"
     )
-
-    if distro == "ubuntu_18_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "ubuntu_18_04.sh")
-
-    elif distro == "ubuntu_20_04.sh":
+    if distro == "ubuntu_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_20_04.sh")
 
@@ -73,10 +68,6 @@ def do_distro_install(distro):
     elif distro == "ubuntu_22_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_22_04.sh")
-
-    elif distro == "pop_18_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_18_04.sh")
 
     elif distro == "pop_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
@@ -451,10 +442,7 @@ def get_distro():
             logger.critical("Unsupported Raspbian - We only support Raspbian 10")
 
     elif id == "pop":
-        if version == "18.04":
-            logger.info("POP 18.04 Detected")
-            file = "pop_18_04.sh"
-        elif version == "20.04":
+        if version == "20.04":
             logger.info("POP 20.04 Detected")
             file = "pop_20_04.sh"
         elif version == "20.10":
@@ -465,14 +453,11 @@ def get_distro():
             file = "pop_21_04.sh"
         else:
             logger.critical(
-                "Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10 / 21.04"
+                "Unsupported POP - We only support PopOS 20.04 / 20.10 / 21.04"
             )
 
     elif id == "ubuntu":
-        if version == "18.04":
-            logger.info("Ubuntu 18.04 Detected")
-            file = "ubuntu_18_04.sh"
-        elif version == "20.04":
+        if version == "20.04":
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
         elif version == "20.10":
@@ -489,7 +474,7 @@ def get_distro():
             file = "ubuntu_22_04.sh"
         else:
             logger.critical(
-                "Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
+                "Unsupported Ubuntu - We only support Ubuntu 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
             )
 
     elif id == "centos":
