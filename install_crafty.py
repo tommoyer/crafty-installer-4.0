@@ -69,6 +69,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_22_04.sh")
 
+    elif distro == "ubuntu_22_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "ubuntu_22_10.sh")
+
     elif distro == "pop_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_20_04.sh")
@@ -470,6 +474,10 @@ def get_distro():
             logger.info("Ubuntu 21.10 Detected")
             file = "ubuntu_21_10.sh"
         elif version == "22.04":
+            logger.info("Ubuntu 22.04 Detected")
+            file = "ubuntu_22_04.sh"
+
+        elif version == "22.10":
             logger.info("Ubuntu 22.04 Detected")
             file = "ubuntu_22_04.sh"
         else:
