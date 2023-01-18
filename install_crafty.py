@@ -105,6 +105,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "raspbian_10.sh")
 
+    elif distro == "raspbian_11.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "raspbian_11.sh")
+
     elif distro == "mint_20.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "mint_20.sh")
@@ -454,8 +458,12 @@ def get_distro():
         if version == "10":
             logger.info("Raspbian 10 'Buster' Detected")
             file = "raspbian_10.sh"
+
+        if version == "11":
+            logger.info("Raspbian 11 'Buster' Detected")
+            file = "raspbian_11.sh"
         else:
-            logger.critical("Unsupported Raspbian - We only support Raspbian 10")
+            logger.critical("Unsupported Raspbian - We only support Raspbian 10 / 11")
 
     elif id == "pop":
         if version == "20.04":
