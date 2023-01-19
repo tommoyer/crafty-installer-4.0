@@ -542,15 +542,18 @@ def get_distro():
         logger.info("{} version {} Dectected".format(id, version))
         file = "arch.sh"
     elif id == "fedora":
-        if version == "32":
-            logger.info("Fedora 32 Detected")
+        if version == "35":
+            logger.info("Fedora 35 Detected")
             file = "fedora.sh"
-        elif version == "33":
-            logger.info("Fedora 33 Detected")
+        elif version == "36":
+            logger.info("Fedora 36 Detected")
+            file = "fedora.sh"
+        elif version == "37":
+            logger.info("Fedora 37 Detected")
             file = "fedora.sh"
         else:
             logger.critical(
-                "Unsupported Fedora version - We only support Fedora 32 / 33"
+                "Unsupported Fedora version - We only support Fedora 35 / 36 / 37"
             )
     if not file:
         logger.critical(
