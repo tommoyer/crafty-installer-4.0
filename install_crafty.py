@@ -49,12 +49,7 @@ def do_distro_install(distro):
     pretty.warning(
         "Please be patient and do not exit the installer otherwise things may break"
     )
-
-    if distro == "ubuntu_18_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "ubuntu_18_04.sh")
-
-    elif distro == "ubuntu_20_04.sh":
+    if distro == "ubuntu_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_20_04.sh")
 
@@ -74,9 +69,9 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_22_04.sh")
 
-    elif distro == "pop_18_04.sh":
+    elif distro == "ubuntu_22_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_18_04.sh")
+        script = os.path.join(real_dir, "app", "ubuntu_22_10.sh")
 
     elif distro == "pop_20_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
@@ -90,6 +85,14 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_21_04.sh")
 
+    elif distro == "pop_21_10.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "pop_21_10.sh")
+
+    elif distro == "pop_22_04.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "pop_22_04.sh")
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "debian_10.sh")
@@ -102,6 +105,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "raspbian_10.sh")
 
+    elif distro == "raspbian_11.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "raspbian_11.sh")
+
     elif distro == "mint_20.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "mint_20.sh")
@@ -113,6 +120,10 @@ def do_distro_install(distro):
     elif distro == "mint_20_3.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "mint_20_3.sh")
+
+    elif distro == "mint_21.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "mint_21.sh")
 
     elif distro == "arch.sh":
         pretty.info("We are updating python, open-jdk, and pip")
@@ -447,14 +458,15 @@ def get_distro():
         if version == "10":
             logger.info("Raspbian 10 'Buster' Detected")
             file = "raspbian_10.sh"
+
+        if version == "11":
+            logger.info("Raspbian 11 'Buster' Detected")
+            file = "raspbian_11.sh"
         else:
-            logger.critical("Unsupported Raspbian - We only support Raspbian 10")
+            logger.critical("Unsupported Raspbian - We only support Raspbian 10 / 11")
 
     elif id == "pop":
-        if version == "18.04":
-            logger.info("POP 18.04 Detected")
-            file = "pop_18_04.sh"
-        elif version == "20.04":
+        if version == "20.04":
             logger.info("POP 20.04 Detected")
             file = "pop_20_04.sh"
         elif version == "20.10":
@@ -463,16 +475,22 @@ def get_distro():
         elif version == "21.04":
             logger.info("POP 21.04 Detected")
             file = "pop_21_04.sh"
+
+        elif version == "21.10":
+            logger.info("POP 21.10 Detected")
+            file = "pop_21_10.sh"
+
+        elif version == "22.04":
+            logger.info("POP 21.04 Detected")
+            file = "pop_22_04.sh"
+
         else:
             logger.critical(
-                "Unsupported POP - We only support PopOS 18.04 / 20.04 / 20.10 / 21.04"
+                "Unsupported POP - We only support PopOS 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
             )
 
     elif id == "ubuntu":
-        if version == "18.04":
-            logger.info("Ubuntu 18.04 Detected")
-            file = "ubuntu_18_04.sh"
-        elif version == "20.04":
+        if version == "20.04":
             logger.info("Ubuntu 20.04 Detected")
             file = "ubuntu_20_04.sh"
         elif version == "20.10":
@@ -487,9 +505,13 @@ def get_distro():
         elif version == "22.04":
             logger.info("Ubuntu 22.04 Detected")
             file = "ubuntu_22_04.sh"
+
+        elif version == "22.10":
+            logger.info("Ubuntu 22.04 Detected")
+            file = "ubuntu_22_10.sh"
         else:
             logger.critical(
-                "Unsupported Ubuntu - We only support Ubuntu 18.04 / 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
+                "Unsupported Ubuntu - We only support Ubuntu 20.04 / 20.10 / 21.04 / 21.10 / 22.04 / 22.10"
             )
 
     elif id == "centos":
@@ -508,22 +530,30 @@ def get_distro():
         elif version == "20.3":
             logger.info("Mint 20.3 Detected")
             file = "mint_20_3.sh"
+        elif version == "21":
+            logger.info("Mint 21 Detected")
+            file = "mint_21.sh"
         else:
-            logger.critical("Unsupported Mint - We only support Mint 20")
+            logger.critical(
+                "Unsupported Mint - We only support Mint 20 / 20.2 / 20.3 / 21"
+            )
 
     elif id == "arch" or id == "manjaro" or id == "archarm":
         logger.info("{} version {} Dectected".format(id, version))
         file = "arch.sh"
     elif id == "fedora":
-        if version == "32":
-            logger.info("Fedora 32 Detected")
+        if version == "35":
+            logger.info("Fedora 35 Detected")
             file = "fedora.sh"
-        elif version == "33":
-            logger.info("Fedora 33 Detected")
+        elif version == "36":
+            logger.info("Fedora 36 Detected")
+            file = "fedora.sh"
+        elif version == "37":
+            logger.info("Fedora 37 Detected")
             file = "fedora.sh"
         else:
             logger.critical(
-                "Unsupported Fedora version - We only support Fedora 32 / 33"
+                "Unsupported Fedora version - We only support Fedora 35 / 36 / 37"
             )
     if not file:
         logger.critical(
