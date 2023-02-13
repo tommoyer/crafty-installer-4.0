@@ -533,9 +533,12 @@ def get_distro():
         elif version == "21":
             logger.info("Mint 21 Detected")
             file = "mint_21.sh"
+        elif version == "21.1":
+            logger.info("Mint 21 Detected")
+            file = "mint_21.sh"
         else:
             logger.critical(
-                "Unsupported Mint - We only support Mint 20 / 20.2 / 20.3 / 21"
+                "Unsupported Mint - We only support Mint 20 / 20.2 / 20.3 / 21 / 21.1"
             )
 
     elif id == "arch" or id == "manjaro" or id == "archarm":
