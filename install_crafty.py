@@ -101,6 +101,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk, temurin and pip")
         script = os.path.join(real_dir, "app", "debian_11.sh")
 
+    elif distro == "rocky.sh":
+        pretty.info("We are updating python3, open-jdk, temurin and pip")
+        script = os.path.join(real_dir, "app", "rocky.sh")
+
     elif distro == "raspbian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "raspbian_10.sh")
