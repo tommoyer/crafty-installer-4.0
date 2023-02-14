@@ -411,7 +411,7 @@ Type=simple
 User=crafty
 WorkingDirectory={0}
 
-ExecStart={0}/run_crafty_service.sh
+ExecStart=/usr/bin/bash {0}/run_crafty_service.sh
 
 Restart=on-failure
 # Other restart options: always, on-abort, etc
