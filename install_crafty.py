@@ -515,16 +515,16 @@ def get_distro():
             )
 
     elif id == "rocky":
-        if version == 8.6:
+        if version == "8.6":
             logger.info("Rocky 8.6 Detected")
             file = "rocky.sh"
-        elif version == 8.7:
+        elif version == "8.7":
             logger.info("Rocky 8.7 Detected")
             file = "rocky.sh"
-        elif version == 9.0:
+        elif version == "9.0":
             logger.info("Rocky 9.0 Detected")
             file = "rocky.sh"
-        elif version == 9.1:
+        elif version == "9.1":
             logger.info("Rocky 9.1 Detected")
             file = "rocky.sh"
         else:
