@@ -93,6 +93,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_22_04.sh")
 
+    elif distro == "centos.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "centos.sh")
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "debian_10.sh")
