@@ -93,6 +93,10 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_22_04.sh")
 
+    elif distro == "centos.sh":
+        pretty.info("We are updating python3, open-jdk and pip")
+        script = os.path.join(real_dir, "app", "centos.sh")
+
     elif distro == "debian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "debian_10.sh")
@@ -100,6 +104,10 @@ def do_distro_install(distro):
     elif distro == "debian_11.sh":
         pretty.info("We are updating python3, open-jdk, temurin and pip")
         script = os.path.join(real_dir, "app", "debian_11.sh")
+
+    elif distro == "rocky.sh":
+        pretty.info("We are updating python3, open-jdk, temurin and pip")
+        script = os.path.join(real_dir, "app", "rocky.sh")
 
     elif distro == "raspbian_10.sh":
         pretty.info("We are updating python3, open-jdk and pip")
@@ -407,7 +415,7 @@ Type=simple
 User=crafty
 WorkingDirectory={0}
 
-ExecStart={0}/run_crafty_service.sh
+ExecStart=/usr/bin/bash {0}/run_crafty_service.sh
 
 Restart=on-failure
 # Other restart options: always, on-abort, etc
@@ -514,11 +522,33 @@ def get_distro():
                 "Unsupported Ubuntu - We only support Ubuntu 20.04 / 20.10 / 21.04 / 21.10 / 22.04 / 22.10"
             )
 
+    elif id == "rocky":
+        if version == "8.6":
+            logger.info("Rocky 8.6 Detected")
+            file = "rocky.sh"
+        elif version == "8.7":
+            logger.info("Rocky 8.7 Detected")
+            file = "rocky.sh"
+        elif version == "9.0":
+            logger.info("Rocky 9.0 Detected")
+            file = "rocky.sh"
+        elif version == "9.1":
+            logger.info("Rocky 9.1 Detected")
+            file = "rocky.sh"
+        else:
+            logger.critical(
+                "Unsupported Distro - We only support Rocky 8.6 / 8.7 / 9.0 / 9.1"
+            )
+
     elif id == "centos":
-        logger.critical(
-            "Unsupported Distro - CentOS is EOL as of 2022/12/31. As such we no longer support this distro. Please upgrade to its successor, CentOS Stream 8. "
-            "Support for CentOS stream 8 will be coming soon..."
-        )
+        if version == "8":
+            logger.info("CentOS Stream 8 Detected")
+            file = "centos.sh"
+        elif version == "9":
+            logger.info("CentOS Stream 9 Detected")
+            file = "centos.sh"
+        else:
+            logger.critical("Unsupported Distro - We only support CentOS Stream 8 / 9")
 
     elif id == "linuxmint":
         if version == "20":
