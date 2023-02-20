@@ -556,7 +556,7 @@ def get_distro():
             file = "mint_20.sh"
         elif version == "20.2":
             logger.info("Mint 20.2 Detected")
-            file = "mint_20_2sh"
+            file = "mint_20_2.sh"
         elif version == "20.3":
             logger.info("Mint 20.3 Detected")
             file = "mint_20_3.sh"
