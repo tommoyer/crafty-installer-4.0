@@ -637,7 +637,7 @@ if __name__ == "__main__":
     py_check = False
 
     # are we at least on 3.8?
-    if not (sys.version_info.major == 3 and sys.version_info.minor >= 8):
+    if not (sys.version_info.major == 3 and sys.version_info.minor >= 9):
         pretty.critical("This script requires Python 3.8 or higher!")
         pretty.critical(
             "You are using Python {}.{}.".format(
@@ -645,7 +645,7 @@ if __name__ == "__main__":
             )
         )
         logger.critical(
-            "Python Version < 3.8: {}.{} was found".format(
+            "Python Version < 3.9: {}.{} was found".format(
                 sys.version_info.major, sys.version_info.minor
             )
         )
@@ -673,7 +673,7 @@ if __name__ == "__main__":
         do_distro_install(distro)
     else:
         if not py_check:
-            pretty.critical("This script requires Python 3.8 or higher!")
+            pretty.critical("This script requires Python 3.9 or higher!")
             helper.cleanup_bad_install()
             sys.exit(1)
 
