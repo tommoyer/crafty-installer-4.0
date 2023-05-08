@@ -57,15 +57,8 @@ def do_distro_install(distro):
     pretty.warning(
         "Please be patient and do not exit the installer otherwise things may break"
     )
-    if distro == "ubuntu_20_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "ubuntu_20_04.sh")
 
-    elif distro == "ubuntu_20_10.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "ubuntu_20_10.sh")
-
-    elif distro == "ubuntu_21_04.sh":
+    if distro == "ubuntu_21_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_21_04.sh")
 
@@ -81,13 +74,9 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_22_10.sh")
 
-    elif distro == "pop_20_04.sh":
+    elif distro == "ubuntu_23_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_20_04.sh")
-
-    elif distro == "pop_20_10.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_20_10.sh")
+        script = os.path.join(real_dir, "app", "ubuntu_23_04.sh")
 
     elif distro == "pop_21_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
@@ -483,13 +472,7 @@ def get_distro():
             logger.critical("Unsupported Raspbian - We only support Raspbian 10 / 11")
 
     elif id == "pop":
-        if version == "20.04":
-            logger.info("POP 20.04 Detected")
-            file = "pop_20_04.sh"
-        elif version == "20.10":
-            logger.info("POP 20.10 Detected")
-            file = "pop_20_10.sh"
-        elif version == "21.04":
+        if version == "21.04":
             logger.info("POP 21.04 Detected")
             file = "pop_21_04.sh"
 
@@ -503,17 +486,11 @@ def get_distro():
 
         else:
             logger.critical(
-                "Unsupported POP - We only support PopOS 20.04 / 20.10 / 21.04 / 21.10 / 22.04"
+                "Unsupported POP - We only support PopOS 21.04 / 21.10 / 22.04"
             )
 
     elif id == "ubuntu":
-        if version == "20.04":
-            logger.info("Ubuntu 20.04 Detected")
-            file = "ubuntu_20_04.sh"
-        elif version == "20.10":
-            logger.info("Ubuntu 20.10 Detected")
-            file = "ubuntu_20_10.sh"
-        elif version == "21.04":
+        if version == "21.04":
             logger.info("Ubuntu 21.04 Detected")
             file = "ubuntu_21_04.sh"
         elif version == "21.10":
@@ -526,9 +503,14 @@ def get_distro():
         elif version == "22.10":
             logger.info("Ubuntu 22.04 Detected")
             file = "ubuntu_22_10.sh"
+
+        elif version == "23.04":
+            logger.info("Ubuntu 22.04 Detected")
+            file = "ubuntu_23_04.sh"
         else:
             logger.critical(
-                "Unsupported Ubuntu - We only support Ubuntu 20.04 / 20.10 / 21.04 / 21.10 / 22.04 / 22.10"
+                "Unsupported Ubuntu - We only support Ubuntu 21.04 / 21.10 /"
+                " 22.04 / 22.10 / 23.04"
             )
 
     elif id == "rocky":
@@ -646,7 +628,7 @@ if __name__ == "__main__":
     py_check = False
 
     # are we at least on 3.8?
-    if not (sys.version_info.major == 3 and sys.version_info.minor >= 8):
+    if not (sys.version_info.major == 3 and sys.version_info.minor >= 9):
         pretty.critical("This script requires Python 3.8 or higher!")
         pretty.critical(
             "You are using Python {}.{}.".format(
@@ -654,7 +636,7 @@ if __name__ == "__main__":
             )
         )
         logger.critical(
-            "Python Version < 3.8: {}.{} was found".format(
+            "Python Version < 3.9: {}.{} was found".format(
                 sys.version_info.major, sys.version_info.minor
             )
         )
@@ -682,7 +664,7 @@ if __name__ == "__main__":
         do_distro_install(distro)
     else:
         if not py_check:
-            pretty.critical("This script requires Python 3.8 or higher!")
+            pretty.critical("This script requires Python 3.9 or higher!")
             helper.cleanup_bad_install()
             sys.exit(1)
 
