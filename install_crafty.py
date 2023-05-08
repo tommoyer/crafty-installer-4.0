@@ -16,11 +16,19 @@ from app.pretty import pretty
 with open("config.json", "r") as fh:
     defaults = json.load(fh)
 
+def remove_duplicate_args(l):
+    return list(set(l))
+
 if len(sys.argv) > 1:
-    if sys.argv[1] == "-d":
+    arguments = remove_duplicate_args(sys.argv[1:])
+
+    if ("-d" in arguments):
         defaults["debug_mode"] = True
         pretty.info("Debug mode turned on")
 
+    if ("-s" in arguments):
+        defaults["clone_method"] = "ssh"
+        pretty.info("Git will try to clone using SSH")
 
 # our pretty header
 def do_header():
@@ -33,7 +41,7 @@ def do_header():
     msg += "# \t \t Crafty Controller 4.0 Linux Installer \t \t #"
     msg += "-" * 25
     msg += "\n \t\t\t This program will install Crafty Controller 4.0 on your Linux Machine"
-    msg += "\n \t\t\t This program isn't perfect, but it will do it's best to get you up an running"
+    msg += "\n \t\t\t This program isn't perfect, but it will do it's best to get you up and running"
 
     msg += "\n"
     pretty.header(msg)
@@ -177,15 +185,7 @@ def setup_repo():
         helper.cleanup_bad_install(install_dir)
         sys.exit(1)
 
-    # Ask if they have ssh
-    pretty.info("To start, how would you like to authenticate?")
-    if not defaults["unattended"]:
-        clone_method = helper.get_user_valid_input(
-            "Choose SSH if you have a gitlab ssh key set up, otherwise, choose HTTPS.",
-            ["ssh", "https"],
-        )
-    else:
-        clone_method = defaults["clone_method"]
+    clone_method = defaults["clone_method"]
 
     # cloning the repo
     pretty.info("Cloning the Git Repo...this could take a few moments")
@@ -195,15 +195,20 @@ def setup_repo():
         clone_repo_https()
 
 
-def confirm_ssh_key_location(key_location):
+def confirm_ssh_key_location(key_location, tries=0):
+    pretty.info("Attempts: {}".format(tries))
     if key_location == None:
         key_location = helper.get_user_open_input(
-            "Unable to detect ssh key - Please input the full path to your ssh key"
+            "Unable to detect ssh key - Please input the full path to your ssh key, or 'https' to fallback to https"
         )
+
+    if (key_location == "https" or tries > 2):
+        pretty.info("Falling back to https")
+        return "https"
 
     if not helper.check_file_exists(key_location):
         pretty.warning("The specified key does not exist!")
-        return confirm_ssh_key_location(None)
+        return confirm_ssh_key_location(None, tries + 1)
 
     key_confirm = helper.get_user_valid_input(
         "SSH key selected from {}. Would you like to use this key?".format(
@@ -218,7 +223,7 @@ def confirm_ssh_key_location(key_location):
         key_location = helper.get_user_open_input(
             "Please specify the full path of the ssh key you wish to use"
         )
-        return confirm_ssh_key_location(key_location)
+        return confirm_ssh_key_location(key_location, tries + 1)
 
 
 def clone_repo_ssh():
@@ -230,6 +235,10 @@ def clone_repo_ssh():
         ssh_key_loc = confirm_ssh_key_location(user_ssh_dir + "id_rsa")
     else:
         ssh_key_loc = confirm_ssh_key_location(None)
+
+    if ssh_key_loc == "https":
+        return clone_repo_https()
+
     try:
         subprocess.check_output(
             'git clone git@gitlab.com:crafty-controller/crafty-4.git  --config core.sshCommand="ssh -i {}"'.format(
@@ -813,9 +822,6 @@ if __name__ == "__main__":
     if service_answer:
         pretty.info(
             "A service unit file has been saved in /etc/systemd/system/crafty.service"
-        )
-        pretty.info(
-            "You will need to run Crafty once normally to get the admin password before enabling the service or running the command 'sudo systemctl status crafty.service' after starting the service"
         )
         pretty.info(
             "run this command to enable crafty as a service- 'sudo systemctl enable crafty.service' "
