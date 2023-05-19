@@ -16,19 +16,22 @@ from app.pretty import pretty
 with open("config.json", "r") as fh:
     defaults = json.load(fh)
 
+
 def remove_duplicate_args(l):
     return list(set(l))
+
 
 if len(sys.argv) > 1:
     arguments = remove_duplicate_args(sys.argv[1:])
 
-    if ("-d" in arguments):
+    if "-d" in arguments:
         defaults["debug_mode"] = True
         pretty.info("Debug mode turned on")
 
-    if ("-s" in arguments):
+    if "-s" in arguments:
         defaults["clone_method"] = "ssh"
         pretty.info("Git will try to clone using SSH")
+
 
 # our pretty header
 def do_header():
@@ -155,7 +158,6 @@ def do_distro_install(distro):
             sys.stdout.write(line.decode("utf-8"))
 
     except Exception as e:
-
         pretty.critical("Error installing dependencies: {}".format(e))
         logger.critical("Error installing dependencies: {}".format(e))
 
@@ -202,7 +204,7 @@ def confirm_ssh_key_location(key_location, tries=0):
             "Unable to detect ssh key - Please input the full path to your ssh key, or 'https' to fallback to https"
         )
 
-    if (key_location == "https" or tries > 2):
+    if key_location == "https" or tries > 2:
         pretty.info("Falling back to https")
         return "https"
 
@@ -514,10 +516,7 @@ def get_distro():
             )
 
     elif id == "rocky":
-        if version == "8.6":
-            logger.info("Rocky 8.6 Detected")
-            file = "rocky.sh"
-        elif version == "8.7":
+        if version == "8.7":
             logger.info("Rocky 8.7 Detected")
             file = "rocky.sh"
         elif version == "9.0":
@@ -525,6 +524,9 @@ def get_distro():
             file = "rocky.sh"
         elif version == "9.1":
             logger.info("Rocky 9.1 Detected")
+            file = "rocky.sh"
+        elif version == "9.2":
+            logger.info("Rocky 9.2 Detected")
             file = "rocky.sh"
         else:
             logger.critical(
@@ -588,7 +590,6 @@ def get_distro():
 
 
 if __name__ == "__main__":
-
     logging.basicConfig(
         filename="installer.log",
         filemode="w",
