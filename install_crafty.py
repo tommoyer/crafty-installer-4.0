@@ -97,13 +97,13 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "centos.sh")
 
-    elif distro == "debian_10.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "debian_10.sh")
-
     elif distro == "debian_11.sh":
         pretty.info("We are updating python3, open-jdk, temurin and pip")
         script = os.path.join(real_dir, "app", "debian_11.sh")
+
+    elif distro == "debian_12.sh":
+        pretty.info("We are updating python3, open-jdk, and pip")
+        script = os.path.join(real_dir, "app", "debian_12.sh")
 
     elif distro == "rocky.sh":
         pretty.info("We are updating python3, open-jdk, temurin and pip")
@@ -453,14 +453,14 @@ def get_distro():
     file = False
 
     if id == "debian":
-        if version == "10":
-            logger.info("Debian 10 'Buster' Detected")
-            file = "debian_10.sh"
         if version == "11":
             logger.info("Debian 11 'Bullseye' Detected")
             file = "debian_11.sh"
+        if version == "12":
+            logger.info("Debian 12 'Bookworm' Detected")
+            file = "debian_12.sh"
         else:
-            logger.critical("Unsupported Debian - We only support Debian 10 and 11")
+            logger.critical("Unsupported Debian - We only support Debian 11 and 12")
 
     elif id == "raspbian":
         if version == "10":
