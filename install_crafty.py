@@ -73,14 +73,6 @@ def do_distro_install(distro):
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "ubuntu_23_04.sh")
 
-    elif distro == "pop_21_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_21_04.sh")
-
-    elif distro == "pop_21_10.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_21_10.sh")
-
     elif distro == "pop_22_04.sh":
         pretty.info("We are updating python3, open-jdk and pip")
         script = os.path.join(real_dir, "app", "pop_22_04.sh")
@@ -466,21 +458,14 @@ def get_distro():
             logger.critical("Unsupported Raspbian - We only support Raspbian 10 / 11")
 
     elif id == "pop":
-        if version == "21.04":
-            logger.info("POP 21.04 Detected")
-            file = "pop_21_04.sh"
 
-        elif version == "21.10":
-            logger.info("POP 21.10 Detected")
-            file = "pop_21_10.sh"
-
-        elif version == "22.04":
+        if version == "22.04":
             logger.info("POP 21.04 Detected")
             file = "pop_22_04.sh"
 
         else:
             logger.critical(
-                "Unsupported POP - We only support PopOS 21.04 / 21.10 / 22.04"
+                "Unsupported POP - We only support PopOS 22.04"
             )
 
     elif id == "ubuntu":
