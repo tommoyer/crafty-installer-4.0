@@ -458,15 +458,12 @@ def get_distro():
             logger.critical("Unsupported Raspbian - We only support Raspbian 10 / 11")
 
     elif id == "pop":
-
         if version == "22.04":
             logger.info("POP 21.04 Detected")
             file = "pop_22_04.sh"
 
         else:
-            logger.critical(
-                "Unsupported POP - We only support PopOS 22.04"
-            )
+            logger.critical("Unsupported POP - We only support PopOS 22.04")
 
     elif id == "ubuntu":
         if version == "22.04":
