@@ -389,6 +389,7 @@ def get_distro():
         # Panic on Distro Version
         versions = linux_versions[user_distro]
         logger.critical(f"Unsupported Version - We only support {user_distro}, {versions}")
+        return
 
     logger.info(f"{user_distro} {user_version} Detected!")
 
