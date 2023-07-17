@@ -376,34 +376,33 @@ def get_distro():
 
     if id == "arch" or id == "archarm":
         logger.info(f"{id} version {version} Dectected")
-        file = "arch.sh"
+        return "arch.sh"
 
-    user_distro = linux_versions.get(id)
-    if user_distro:
-        user_version = linux_versions[user_distro].get(version)
-        logger.info(f"{user_distro} {user_version} Detected!")
-    else:
+    user_distro = id
+    user_version = version
+    if user_distro not in linux_versions:
+        # Panic on Distro
         distros = linux_versions.keys()
         logger.critical(f"Unsupported Distro - We only support {distros}")
         return
-
-    if not user_version:
+    if user_version not in linux_versions[user_distro]:
+        # Panic on Distro Version
         versions = linux_versions[user_distro]
-        logger.critical(
-            f"Unsupported {user_distro} version - We only support {user_distro} {versions}"
-        )
+        logger.critical(f"Unsupported Version - We only support {user_distro}, {versions}")
+        return
+
+    logger.info(f"{user_distro} {user_version} Detected!")
 
     if helper.check_file_exists(
         os.path.join(f"app", f"{user_distro}_{user_version}.sh")
     ):
         file = f"{user_distro}_{user_version}.sh"
     elif helper.check_file_exists(
-        os.path.join(f"app", f"{user_distro}_{user_version}.sh")
+        os.path.join(f"app", f"{user_distro}.sh")
     ):
         file = f"{user_distro}.sh"
     if not file:
         logger.critical(f"Unable to determine distro: ID:{id} - Version:{version}")
-
     return file
 
 
