@@ -357,6 +357,7 @@ def make_update_script():
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-4 \n"
     txt += "git pull \n"
+    txt += "python -m ensurepip --upgrade \n"
     txt += "pip3 install -r requirements.txt \n"
     with open("update_crafty.sh", "w") as fh:
         fh.write(txt)
