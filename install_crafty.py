@@ -61,71 +61,10 @@ def do_distro_install(distro):
         "Please be patient and do not exit the installer otherwise things may break"
     )
 
-    if distro == "ubuntu_22_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "ubuntu_22_04.sh")
+    pretty.info("We are updating python3 and pip")
+    script = os.path.join(real_dir, "app", distro)
 
-    elif distro == "ubuntu_23_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "ubuntu_23_04.sh")
-
-    elif distro == "pop_22_04.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "pop_22_04.sh")
-
-    elif distro == "centos.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "centos.sh")
-
-    elif distro == "debian_11.sh":
-        pretty.info("We are updating python3, open-jdk, temurin and pip")
-        script = os.path.join(real_dir, "app", "debian_11.sh")
-
-    elif distro == "debian_12.sh":
-        pretty.info("We are updating python3, open-jdk, and pip")
-        script = os.path.join(real_dir, "app", "debian_12.sh")
-
-    elif distro == "rocky.sh":
-        pretty.info("We are updating python3, open-jdk, temurin and pip")
-        script = os.path.join(real_dir, "app", "rocky.sh")
-
-    elif distro == "raspbian_10.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "raspbian_10.sh")
-
-    elif distro == "raspbian_11.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "raspbian_11.sh")
-
-    elif distro == "mint_20.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "mint_20.sh")
-
-    elif distro == "mint_20_2.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "mint_20_2.sh")
-
-    elif distro == "mint_20_3.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "mint_20_3.sh")
-
-    elif distro == "mint_21.sh":
-        pretty.info("We are updating python3, open-jdk and pip")
-        script = os.path.join(real_dir, "app", "mint_21.sh")
-
-    elif distro == "arch.sh":
-        pretty.info("We are updating python, open-jdk, and pip")
-        script = os.path.join(real_dir, "app", "arch.sh")
-
-    elif distro == "fedora.sh":
-        pretty.info("We are updating python3, open-jdk, pip, and libffi")
-        script = os.path.join(real_dir, "app", "fedora.sh")
-
-    else:
-        pretty.critical("Unknown Distro: {}".format(distro))
-        sys.exit(1)
-
-    logger.info("Running {}".format(script))
+    logger.info(f"Running {script}")
 
     # resp = subprocess.check_output("app/ubuntu_install_depends.sh", shell=True)
     try:
@@ -426,6 +365,8 @@ WantedBy=multi-user.target
 def get_distro():
     id = pydistro.id()
     version = pydistro.version()
+    with open("linux_versions.json", "r") as fh:
+        linux_versions = json.load(fh)
     sys.stdout.write(
         "We detected your os is: {id} - Version: {version}\n".format(
             id=id, version=version
@@ -434,117 +375,35 @@ def get_distro():
 
     file = False
 
-    if id == "debian":
-        if version == "11":
-            logger.info("Debian 11 'Bullseye' Detected")
-            file = "debian_11.sh"
-        if version == "12":
-            logger.info("Debian 12 'Bookworm' Detected")
-            file = "debian_12.sh"
-        else:
-            logger.critical("Unsupported Debian - We only support Debian 11 and 12")
+    if id == "arch" or id == "archarm":
+        logger.info(f"{id} version {version} Dectected")
+        return "arch.sh"
 
-    elif id == "raspbian":
-        if version == "10":
-            logger.info("Raspbian 10 'Buster' Detected")
-            file = "raspbian_10.sh"
+    user_distro = id
+    user_version = version
+    if user_distro not in linux_versions:
+        # Panic on Distro
+        distros = linux_versions.keys()
+        logger.critical(f"Unsupported Distro - We only support {distros}")
+        return
+    if user_version not in linux_versions[user_distro]:
+        # Panic on Distro Version
+        versions = linux_versions[user_distro]
+        logger.critical(f"Unsupported Version - We only support {user_distro}, {versions}")
+        return
 
-        if version == "11":
-            logger.info("Raspbian 11 'Buster' Detected")
-            file = "raspbian_11.sh"
-        else:
-            logger.critical("Unsupported Raspbian - We only support Raspbian 10 / 11")
+    logger.info(f"{user_distro} {user_version} Detected!")
 
-    elif id == "pop":
-        if version == "22.04":
-            logger.info("POP 21.04 Detected")
-            file = "pop_22_04.sh"
-
-        else:
-            logger.critical("Unsupported POP - We only support PopOS 22.04")
-
-    elif id == "ubuntu":
-        if version == "22.04":
-            logger.info("Ubuntu 22.04 Detected")
-            file = "ubuntu_22_04.sh"
-
-        elif version == "23.04":
-            logger.info("Ubuntu 22.04 Detected")
-            file = "ubuntu_23_04.sh"
-        else:
-            logger.critical(
-                "Unsupported Ubuntu - We only support Ubuntu 22.04 / 23.04"
-            )
-
-    elif id == "rocky":
-        if version == "8.7":
-            logger.info("Rocky 8.7 Detected")
-            file = "rocky.sh"
-        elif version == "9.0":
-            logger.info("Rocky 9.0 Detected")
-            file = "rocky.sh"
-        elif version == "9.1":
-            logger.info("Rocky 9.1 Detected")
-            file = "rocky.sh"
-        elif version == "9.2":
-            logger.info("Rocky 9.2 Detected")
-            file = "rocky.sh"
-        else:
-            logger.critical(
-                "Unsupported Distro - We only support Rocky 8.6 / 8.7 / 9.0 / 9.1"
-            )
-
-    elif id == "centos":
-        if version == "8":
-            logger.info("CentOS Stream 8 Detected")
-            file = "centos.sh"
-        elif version == "9":
-            logger.info("CentOS Stream 9 Detected")
-            file = "centos.sh"
-        else:
-            logger.critical("Unsupported Distro - We only support CentOS Stream 8 / 9")
-
-    elif id == "linuxmint":
-        if version == "20":
-            logger.info("Mint 20 Detected")
-            file = "mint_20.sh"
-        elif version == "20.2":
-            logger.info("Mint 20.2 Detected")
-            file = "mint_20_2.sh"
-        elif version == "20.3":
-            logger.info("Mint 20.3 Detected")
-            file = "mint_20_3.sh"
-        elif version == "21":
-            logger.info("Mint 21 Detected")
-            file = "mint_21.sh"
-        elif version == "21.1":
-            logger.info("Mint 21 Detected")
-            file = "mint_21.sh"
-        else:
-            logger.critical(
-                "Unsupported Mint - We only support Mint 20 / 20.2 / 20.3 / 21 / 21.1"
-            )
-
-    elif id == "arch" or id == "manjaro" or id == "archarm":
-        logger.info("{} version {} Dectected".format(id, version))
-        file = "arch.sh"
-
-    elif id == "fedora":
-        if version == "37":
-            logger.info("Fedora 37 Detected")
-            file = "fedora.sh"
-        elif version == "38":
-            logger.info("Fedora 38 Detected")
-            file = "fedora.sh"
-        else:
-            logger.critical(
-                "Unsupported Fedora version - We only support Fedora 37 / 38"
-            )
+    if helper.check_file_exists(
+        os.path.join(f"app", f"{user_distro}_{user_version}.sh")
+    ):
+        file = f"{user_distro}_{user_version}.sh"
+    elif helper.check_file_exists(
+        os.path.join(f"app", f"{user_distro}.sh")
+    ):
+        file = f"{user_distro}.sh"
     if not file:
-        logger.critical(
-            "Unable to determine distro: ID:{} - Version:{}".format(id, version)
-        )
-
+        logger.critical(f"Unable to determine distro: ID:{id} - Version:{version}")
     return file
 
 
