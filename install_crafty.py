@@ -301,7 +301,7 @@ def make_update_script():
     txt += "fi\n"
     txt += "\n"
     txt += "while true; do\n"
-    txt += "    if [[ ! -v 1 ]]; then\n"
+    txt += "    if [[ ! -v yn ]]; then\n"
     txt += "        read -p 'Can we overwrite any local codebase changes? (Y/N)' yn\n"
     txt += "    fi\n"
     txt += "    \n"
