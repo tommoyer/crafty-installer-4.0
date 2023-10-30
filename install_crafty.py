@@ -319,6 +319,7 @@ def make_update_script():
     txt += "\n"
     txt += "git pull \n"
     txt += "python3 -m ensurepip --upgrade \n"
+    txt += "pip3 install --upgrade pip --no-cache-dir\n"
     txt += "pip3 install -r requirements.txt --no-cache-dir \n"
     with open("update_crafty.sh", "w") as fh:
         fh.write(txt)
