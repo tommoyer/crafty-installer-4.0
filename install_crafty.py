@@ -398,7 +398,7 @@ def get_distro():
 
     file = False
 
-    if id == "arch" or id == "archarm":
+    if id == "arch" or id == "archarm" or id == "manjaro":
         logger.info(f"{id} version {version} Dectected")
         return "arch.sh"
 
