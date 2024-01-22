@@ -295,8 +295,31 @@ def make_update_script():
     txt += "cd {}\n".format(install_dir)
     txt += "source venv/bin/activate \n"
     txt += "cd crafty-4 \n"
+    txt += "\n"
+    txt += "if [[ -v 1 ]]; then\n"
+    txt += '    yn="$1"\n'
+    txt += "fi\n"
+    txt += "\n"
+    txt += "while true; do\n"
+    txt += "    if [[ ! -v yn ]]; then\n"
+    txt += "        read -p 'Can we overwrite any local codebase changes? (Y/N)' yn\n"
+    txt += "    fi\n"
+    txt += "    \n"
+    txt += "    case $yn in\n"
+    txt += "        [yY] | -y )\n"
+    txt += "            git reset --hard origin/master\n"
+    txt += "            break;;\n"
+    txt += "        [nN] | -n )\n"
+    txt += "            break;;\n"
+    txt += "        * )\n"
+    txt += "            unset yn\n"
+    txt += "            echo 'Please use Y or N to reply.';;\n"
+    txt += "    esac\n"
+    txt += "done\n"
+    txt += "\n"
     txt += "git pull \n"
-    txt += "python -m ensurepip --upgrade \n"
+    txt += "python3 -m ensurepip --upgrade \n"
+    txt += "pip3 install --upgrade pip --no-cache-dir\n"
     txt += "pip3 install -r requirements.txt --no-cache-dir \n"
     with open("update_crafty.sh", "w") as fh:
         fh.write(txt)
@@ -375,7 +398,7 @@ def get_distro():
 
     file = False
 
-    if id == "arch" or id == "archarm":
+    if id == "arch" or id == "archarm" or id == "manjaro":
         logger.info(f"{id} version {version} Dectected")
         return "arch.sh"
 
